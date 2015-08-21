@@ -28,3 +28,15 @@ foreach ($sage_includes as $file) {
   require_once $filepath;
 }
 unset($file, $filepath);
+
+add_theme_support( 'admin-bar', array( 'callback' => '__return_false' ) );
+
+function cfe_rewrite_rules() {
+    add_rewrite_rule(
+        '^tags/([0-9A-Za-z\-,]+)/?',
+        'index.php?category_name=$matches[1]',
+        'top'
+    );
+}
+
+add_action( 'init', 'cfe_rewrite_rules' );

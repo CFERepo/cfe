@@ -1,0 +1,16 @@
+<article class="post" data-uid="{{ uid }}" data-thumb="{{ thumb }}" data-permalink="{{ permalink }}" data-title="{{ title }}" data-content="{{ content }}" data-position="{{ position }}" data-show-item="true">
+  <h1>{{ title }}</h1>
+  <div class="image">
+    <img src="{{ thumb }}" />
+  </div>
+  <div class="tiers">
+  {{#categories}}
+  	<div>
+  		<span>{{name}}</span>
+  	</div>
+  {{/categories}}
+  </div>
+  <div class="text">
+    {{{ content }}}
+  </div>
+</article>

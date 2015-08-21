@@ -1,0 +1,24 @@
+<article data-alternate="{{ alternate }}" data-uid="{{ uid }}" class="article-{{ uid }} list {{ classes }}" data-json="{{ json }}" data-thumb="{{ thumb }}" data-permalink="{{ permalink }}" data-title="{{ title }}" data-content="{{ content }}" data-excerpt="{{ excerpt}}" data-position="{{ position }}" data-show-item="true">
+  <div class="content-item">
+    <a class="clickable" href="{{ permalink }}">
+      <div class="image" style="background-image: url({{ alternate }});">
+      </div>
+    </a>
+    <a class="clickable" href="{{ permalink }}"><h1>{{ title }}</h1></a>
+    <div class="preview">
+      <div class="tiers">
+      {{#categories}}
+      	<div>
+      		<span>{{name}}</span>
+      	</div>
+      {{/categories}}
+      </div>
+      <div class="text">
+        {{ excerpt }}
+
+         <a class="read-more clickable" href="{{ permalink }}">Read More</a>
+      </div>
+    </div>
+  </div>
+
+</article>

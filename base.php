@@ -14,10 +14,12 @@ use Roots\Sage\Wrapper;
         <?php _e('You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.', 'sage'); ?>
       </div>
     <![endif]-->
+    <div class="cover"></div>
     <?php
       do_action('get_header');
       get_template_part('templates/header');
     ?>
+
     <div class="wrap container" role="document">
       <div class="content row">
         <main class="main" role="main">
@@ -35,5 +37,16 @@ use Roots\Sage\Wrapper;
       get_template_part('templates/footer');
       wp_footer();
     ?>
+
+    <script type='text/javascript' src='/wp-content/themes/cfe/assets/scrollbar/jquery.mCustomScrollbar.concat.min.js'></script>
+    <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/slide.js'></script>
+    <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/mustache.min.js'></script>
+
+    <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/isotope.pkgd.min.js'></script>
+    <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/horizontal.js'></script>
+
+    <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/jquery.mousewheel.min.js'></script>
+    <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/jquery.cookie.js'></script>
+    
   </body>
 </html>
