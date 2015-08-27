@@ -205,6 +205,7 @@ a.brand {
 
 	img {
 		vertical-align: top;
+		width: 300px;
 	}
 
 	span {
@@ -292,6 +293,11 @@ a.brand {
 	top: 16px;
 }
 
+.filters-list.large {
+    color: #fff;
+    padding-top: 10px;
+    padding-left: 20px;
+}
 
 .faux-tiers-container {
 	.filters-list {
@@ -667,6 +673,17 @@ div.sidebar-bottom {
     display: none;
 
     width: 100%;
+
+    .links-newsletter {
+    	a {
+		    color: #fff;
+		    font-size: 0.8em;
+		    text-align: left;
+		    text-transform: uppercase;
+		    display: block;
+		    padding-bottom: 5px;
+    	}
+    }
 }
 
 div.sidebar button.call-out, .call-out {
@@ -871,24 +888,26 @@ div.feed {
    	.image {
 		overflow: hidden;
 	    display: block;
-	    height: calc(100vh - 500px);
+	    height: calc(100vh - 580px);
 	    background-repeat: no-repeat;
 	    background-size: cover;
 	    background-position: center;
    	}
 
-   	h1 {
+   	.preview {
    		padding: 20px;
    	}
 
-
+   	.tiers {
+   		padding-top: 10px;
+   		padding-bottom: 10px;
+   	}
 
    	.text {
-   		padding: 20px;
-   		padding-top: 0px;
 
    		p {
    			color: #000;
+   			padding-top: 0px;
    		}
 
    		iframe {
@@ -962,6 +981,7 @@ div.feed {
    		h1 {
    			font-size: 2em;
    			padding-bottom: 0px;
+   			margin-bottom: 0px;
    		}
    	}
 
@@ -1002,6 +1022,8 @@ div.feed {
 
 	    padding-left: 15px;
 	    padding-right: 15px;
+	    padding-top: 50px;
+	    padding-bottom: 50px;
 
 	    background-color: #fff;
 	    width: 100%;
@@ -1012,12 +1034,6 @@ div.feed {
 	    	img {
 	    		width: 100%;
 	    	}
-	    }
-
-	    h1 {
-	    	padding: 0px;
-	    	padding-top: 20px;
-	    	padding-bottom: 5px;
 	    }
    	}
    	
@@ -1108,7 +1124,6 @@ div.related {
 
 	.title {
 		z-index:4;
-		position: absolute;
 		width:100%;
 		max-width:125px;
 		color: #fff;
@@ -1127,15 +1142,16 @@ div.related {
 	    transform: translate(0,-50%);
 	    top: 50%;
 	    width: 125px;
-	    font-size: 1.5em;
+	    font-size: 1.2em;
 	    vertical-align: middle;
-	    margin-top: -50px;
 	}
 
     .content {
 	    display: table;
 	    table-layout: auto;
 	    text-align: center;
+
+	    position: relative;
     }
 
 	article {
@@ -1164,10 +1180,6 @@ div.related {
 }
 
 div.tiers {
-
-	padding: 20px;
-	padding-bottom: 5px;
-	padding-top: 10px;
 
 	div {
 		background-color: $alt4;
@@ -1733,6 +1745,25 @@ div.landing {
 	animation-name: bounce;
 }
 
+.message {
+	display: none;
+
+	position: static;
+	-webkit-transform: translate(0,-50%);
+	-ms-transform: translate(0,-50%);
+	-o-transform: translate(0,-50%);
+	transform: translate(0,-50%);
+	top: 50%;
+	left: 263px;
+	right: 0;
+	z-index: 100;
+	text-align: center;
+	max-width: 700px;
+	margin: 0px auto;
+	font-size: 1.6em;
+	padding-top: 300px;
+}
+
 
 /* Fix overflow in normal view */
 .inner.normal-view {
@@ -1742,6 +1773,16 @@ div.landing {
 
 	.related-container {
 		display: none !important;
+	}
+
+	.controls {
+		display: none !important;
+	}
+}
+
+.inner.no-results {
+	.message {
+		display: block;
 	}
 }
 
@@ -1756,9 +1797,53 @@ div.landing {
 	}
 }
 
+@media only screen and (min-width : 1097px) {
+
+	div.feed {
+
+		article.post {
+		    h1 {
+		    	display: inline-block;
+		    	min-width: 250px;
+		    	width: 35%;
+		    	float: left;
+		    }
+
+		    .image {
+				float: right;
+				padding-left: 20px;
+				padding-bottom: 20px;
+				width: 65%;
+				display: inline-block;
+				text-align: right;
+		    }
+
+		    .tiers {
+		    	padding-top: 0px;
+		    	min-width: 250px;
+		    	 clear: left;
+		    }
+
+		    .alignnone {
+				float: right;
+				padding: 20px;
+				clear: both;
+		    }
+		}
+
+	}
+}
+
  
 /* Small Devices, Tablets */
 @media only screen and (min-width : 620px) {
+
+	.message {
+
+		position: absolute;
+		padding-top: 0px;
+
+	}
 
 	span.what {
 		font-size: 1em;
@@ -1937,6 +2022,19 @@ div.landing {
 }
 
 body.mobile {
+
+	.filters-list.large {
+	    display: none;
+	}
+
+	a.brand {
+		img {
+			width: 250px;
+			padding-top: 5px;
+			padding-bottom: 5px;
+		}
+	}
+
 	.controls {
 		display: none !important;
 	}

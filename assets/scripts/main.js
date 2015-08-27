@@ -22,7 +22,9 @@
         var pagesTraversed = 0,
         filter_selected,
         x = document.cookie,
-        momentum = 0;
+        momentum = 0,
+
+        $grid = ['featured', 'related'];
 
         function resetElements() {
           $('.sidebar').removeClass('open');
@@ -82,13 +84,13 @@
             $('.feed-ctl').show();
           }
 
-          var relatedInner = $('div.related').innerWidth();
-          var relatedOffset = Number(relatedInner) + Number(263);
+          //var relatedInner = $('div.related').innerWidth();
+          //var relatedOffset = Number(relatedInner);
 
           console.log('window: ' + $(window).width());
-          console.log('element: ' +  relatedOffset);
+          //console.log('element: ' +  relatedOffset);
 
-          if($(window).width() > relatedOffset) {
+          if(($(window).width() - 263) > $('div.related .content').innerWidth()) {
             $('.related-ctl').hide();
           } else {
             $('.related-ctl').show();
@@ -350,16 +352,44 @@
 
         }
 
+        function resetIsotope() {
+
+            $.each( $grid, function( i, val ) {
+
+                console.log(val);
+
+                if($("." + val + " .content").data('isotope')) {
+                  $grid[val].isotope( 'remove', $("." + val + " .content article") );
+                  $grid[val].isotope( 'destroy');
+                }
+           
+            });
+
+            $('body').css('overflow', 'auto');
+
+            $('.inner').removeClass('grid-view');
+            $('.inner').addClass('normal-view');
+
+            $('.related-container').hide();
+
+            $('.feed div.content').add('.related div.content').empty();
+
+        } 
+
         // Refreshes content and run transitions after update
         var updateContent = function(data) {
-
-          console.log('test');
 
           if (data) {
 
             if(typeof data.type == 'undefined') {
               data.type = false;
             }
+
+            if(data.title) {
+            	document.title = data.title;
+            }
+
+            $('.inner').removeClass('no-results');
 
             var featured_list = $('.feed article'),
             related_list = $('.related article');
@@ -378,27 +408,9 @@
             // Scroll to top and reset scrollLeft position of content div
             $( "div.feed" ).scrollLeft( 0 );
 
-            if(data.type == 'search' || data.articles.length == 1) {
+            if(!data.related && (data.type == 'search' || data.articles.length == 1)) {
 
-              $('body').css('overflow', 'auto');
-
-              $('.inner').removeClass('grid-view');
-              $('.inner').addClass('normal-view');
-
-              if($(".related .content").data('isotope')) {
-                $grid_related.isotope({transitionDuration: '0'});
-                $grid_related.isotope( 'remove', related_list );
-                $grid_related.isotope( 'destroy', related_list );
-
-              }
-
-              if($(".feed .content").data('isotope')) {
-                $grid_featured.isotope({transitionDuration: '0'});
-                $grid_featured.isotope( 'remove', featured_list );
-                $grid_featured.isotope( 'destroy', featured_list );
-              }
-
-
+              resetIsotope();
 
             } else {
 
@@ -407,38 +419,45 @@
 
               $('body').css('overflow', 'hidden');
 
-              $grid_featured = $('.feed .content').isotope({
-                itemSelector: 'article',
-                layoutMode: 'horizontal',
-                containerStyle: null,
-                getSortData: {
-                  position: '[data-position]'
-                },
-                sortBy: 'position',
-                filter: function() {
+              $.each( $grid, function( i, val ) {
 
-                  var show = ($(this).attr( "data-show-item") === "true");
+                $grid[val] = $('.' + val + ' .content').isotope({
+                  itemSelector: 'article',
+                  layoutMode: 'horizontal',
+                  getSortData: {
+                    position: '[data-position]'
+                  },
+                  containerStyle: null,
+                  sortBy: 'position',
+                  filter: function() {
 
-                  // If true, show
-                  return show;
-                }
+                    var show = ($(this).attr( "data-show-item") === "true");
+
+                    // If true, show
+                    return show;
+                  }
+                });
+
+                /*$grid[val].on( 'removeComplete',
+                  function( event, removedItems ) {
+                    console.log( 'Removed ' + removedItems.length + ' items' );
+
+                    var articles = $('article', this);
+
+                    console.log(articles);
+
+                    if(articles.length == 0) {
+                      this.isotope( 'destroy');
+
+                      $('.related-container').hide();
+                      $('.feed div.content').empty();
+                      $('.related div.content').empty();
+                    }
+                  }
+                );*/
+
               });
 
-              $grid_related = $('.related .content').isotope({
-                itemSelector: 'article',
-                layoutMode: 'horizontal',
-                getSortData: {
-                  position: '[data-position]'
-                },
-                sortBy: 'position',
-                filter: function() {
-
-                  var show = ($(this).attr( "data-show-item") === "true");
-
-                  // If true, show
-                  return show;
-                }
-              });
 
             }
 
@@ -450,73 +469,84 @@
                 $(innerContainer).addClass('search');
 
                 $('<h5>Search Results: <span>"' + data.query + '"</span></h5>').appendTo(innerContainer);
-                var template = $('#template-search').html();
 
                 if(!data.articles) {
                   $('<div class="no-results">No results found - try another search?</div>').appendTo(innerContainer);
                 }
 
             } else {
-
                 $(innerContainer).removeClass('search');
-
-                if(data.articles.length == 1) {
-
-                  $('.feed div.content').empty();
-
-                  var template = $('#template-post').html();
-
-                } else {
-                  var template = $('#template-list').html();
-                }
             }
 
             if(data.articles) {
 
-              $.each( data.articles, function( i, val ) {
+              if(!$('.feed div.content').is(':visible')) {
+                $('.feed div.content').fadeIn();
+              } 
 
-                // Convert data back to JSON when rendering templates
-                if(val.json) {
-                
+              $('.related-container').fadeIn();
 
-                  if (val.json instanceof Array) {
-                    val.categories = val.json;
-                    val.json = JSON.stringify(val.json);
-                  } else {
-                    val.categories = JSON.parse(val.json);
-                    val.json = val.json;
-                  }
-                }
+              if(data.related) {
+                if(!$('.related div.content').is(':visible')) {
+                  $('.related div.content').fadeIn();
+                } 
+              }  
 
-                var markup = Mustache.render(template, val);
+              $.each(data.articles.concat(data.related), function( i, val ) {
 
-                if($('.inner').hasClass('grid-view')) {
+              	if(val) {
 
-                    // Only append elements that don't exist
-                    if (!$(".feed .article-" + val.uid)[0]) {
+	              	// Use content specific template unless data type set
+	              	if(!data.type) {
 
-                      $grid_featured.isotope( 'insert', $(markup) );
+	              		// Use single post template if single result
+	              		if(!data.related && data.articles.length == 1) {
+	              			var template = $('#template-post').html();
+	              		} else {
+	              			var template = $('#template-' + val.type).html();
+	              		}
+	              		
+	              	} else {
+	              		var template = $('#template-' + data.type).html();
+	              	}
+	              	
+	                // Convert data back to JSON when rendering templates
+	                if(val.json) {
+	                  if (val.json instanceof Array) {
+	                    val.categories = val.json;
+	                    val.json = JSON.stringify(val.json);
+	                  } else {
+	                    val.categories = JSON.parse(val.json);
+	                    val.json = val.json;
+	                  }
+	                }
 
-                      //$(markup).appendTo(innerContainer);
-                    } else {
+	                var markup = Mustache.render(template, val);
 
-                      $( ".feed  .article-" + val.uid ).attr('data-show-item', true);
-                      $( ".feed  .article-" + val.uid ).data( "position", val.position );
+	                if($('.inner').hasClass('grid-view')) {
 
-                    }
+	                    // Only append elements that don't exist
+	                    if (!$( "." + val.type + " .article-" + val.uid)[0]) {
 
+	                      $grid[val.type].isotope( 'insert', $(markup) );
 
-                } else {
+	                      //$(markup).appendTo(innerContainer);
+	                    } else {
 
-                    $(container).css({'opacity' : 0});
+	                      $( "." + val.type + " .article-" + val.uid ).attr('data-show-item', true);
+	                      $( "." + val.type + " .article-" + val.uid ).data( "position", val.position );
 
-                    $(markup).appendTo(innerContainer);
-
-
-                }
-
+	                    }
 
 
+	                } else {
+
+	                    $(container).css({'opacity' : 0});
+	                    $(markup).appendTo(innerContainer);
+
+	                }
+
+              	}
 
 
                 //$(markup).appendTo(innerContainer);
@@ -524,8 +554,12 @@
               });
 
               if($('.inner').hasClass('grid-view')) {
-                $grid_featured.isotope('updateSortData').isotope();
-                $grid_featured.isotope();
+                $grid['featured'].isotope('updateSortData').isotope();
+                $grid['related'].isotope('updateSortData').isotope();
+
+
+                $grid['featured'].isotope();
+                $grid['related'].isotope();
               }
 
             }
@@ -557,10 +591,7 @@
             } else {
 
               // One element in array = single page, use title
-              if(data.articles.length == 1) {
-
-                $('.related-header span.line-item').empty();
-                $('.related div.content').empty();
+              if(!data.related && data.articles.length == 1) {
 
                 document.title = data.articles[0].title;
 
@@ -584,72 +615,7 @@
 
                 hideBackBar();
 
-                if(data.related) {
-
-                  $('.related-container').fadeIn();
-
-                  var template = $('#template-related').html();
-
-                  $('.related-header span.line-item').html('Related Content:').fadeTo('fast', 1);
-
-                  //$('.related div.content').empty();
-
-                  $.each( data.related, function( i, val ) {
-
-                    // Convert data back to JSON when rendering templates
-                    if(val.json) {
-                    
-
-                      if (val.json instanceof Array) {
-                        val.categories = val.json;
-                        val.json = JSON.stringify(val.json);
-                      } else {
-                        val.categories = JSON.parse(val.json);
-                        val.json = val.json;
-                      }
-                    }
-
-                    var markup = Mustache.render(template, val);
-
-                    // Only append elements that don't exist
-                    if (!$(".related .article-" + val.uid)[0]) {
-                      $grid_related.isotope( 'insert', $(markup) );
-
-                      //$(markup).appendTo(innerContainer);
-                    } else {
-
-
-                      console.log(val);
-
-                      $( ".related .article-" + val.uid ).attr('data-show-item', true);
-
-                      $( ".related .article-" + val.uid ).attr( "data-position", val.position );
-                    }
-
-                    //$(markup).appendTo('.related div.content');
-
-                  });
-
-                  if($('.inner').hasClass('grid-view')) {
-                    $grid_related.isotope('updateSortData').isotope();
-                    $grid_related.isotope();
-                  }
-
-                }
-
                 $( container ).animate({ "opacity": 1}, 200, function() {
-
-                  // Reset content sliders to default
-                  //$( ".controls a.content-back" ).fadeOut();
-                  //$( ".controls a.content-forward" ).fadeIn();
-
-                  /*var $isotope = $('.feed .content').isotope({
-                    itemSelector: '.list',
-                    layoutMode: 'horizontal',
-                    containerStyle: null
-                  });
-
-                  $isotope.isotope({ filter: '.wust' });*/
 
                   resizeTasks();
 
@@ -952,7 +918,7 @@
                     
                     data = jQuery.parseJSON(data);
 
-                    if(data.articles || data.related) {
+                    if(data.articles) {
 
                       updateContent(data);
 
@@ -960,6 +926,13 @@
 
                       history.pushState(data, 'Center for Entrepreneurship', data.url);
 
+                    } else {
+
+                      resetIsotope();
+
+                      $('.inner').addClass('no-results');
+
+                      $("body").css("cursor", "auto");
                     }
 
                 },

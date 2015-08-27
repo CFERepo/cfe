@@ -40,7 +40,7 @@ $args = array(
   'type'                     => 'post',
   'child_of'                 => 0,
   'parent'                   => 2,
-  'orderby'                  => 'name',
+  'orderby'                  => 'menu_order',
   'order'                    => 'ASC',
   'hide_empty'               => 0,
   'hierarchical'             => 1,
@@ -52,18 +52,16 @@ $args = array(
 
 ); 
 
-$categories = array(0 => '');
+$categories = array();
 $categories_temp = get_categories( $args );
 
 
 foreach($categories_temp as $key => $category) {
-  if($category->term_id == 8) {
-    unset($categories_temp[$key]);
-  } else if($category->term_id == 10) {
-    $categories[0] = $category;
-  } else {
+
+  if($category->term_id != 8) {
     $categories[] = $category;
   }
+  
 }
 
 $args = array(
@@ -82,6 +80,9 @@ $args = array(
 
 ); 
 
+// Get Involved term
+$button = false;
+
 $all = get_categories( $args );
 
 $sorted = array();
@@ -92,6 +93,7 @@ foreach($all as $k => $item) {
   if($item->parent) {
 
     if($item->name == 'Get Involved' || $item->term_id == 11) {
+      $button = $item;
       unset($all[$k]);
     } else {
       $sorted[$item->parent]['items'][] = $item;
@@ -135,7 +137,7 @@ var queried_tags = false;
 </script>
 
 <?php if(is_home()) { ?>
-<a class="brand" href="/"><img src="/wp-content/uploads/2015/08/block_M_new.png" /><span>Center for Entrepreneurship</span></a>
+<a class="brand" href="/"><img src="/wp-content/themes/cfe/assets/images/signature-stationery_3lines_white.png" /></a>
 
 <header class="banner" role="banner">
   <div class="container-fluid">
@@ -146,7 +148,7 @@ var queried_tags = false;
         <ul>
           <li>
             <a href="#">
-              <span>Start me up.</span>
+              <span>Start Me Up.</span>
               <img class="landing-arrow animated bounce animate-arrow" src="/wp-content/uploads/2015/08/arrow_new.png" />
             </a>
             <ul class="height-transition height-transition-hidden">
@@ -176,14 +178,12 @@ var queried_tags = false;
 
   <div class="social-container">
 
-    <button class="call-out">Get Involved</button>
+    <button class="call-out"><?php echo $button->name ?></button>
 
     <div class="social">
-      <i class="fa fa-envelope-o"></i>
       <i class="fa fa-facebook"></i>
       <i class="fa fa-twitter"></i>
-      <i class="fa fa-linkedin"></i>
-      <i class="fa fa-pinterest-p"></i>
+      <a href="https://www.youtube.com/user/UMCFE"><i class="fa fa-youtube"></i></a>
     </div>
 
     <form class="search-form" method="get" action="<?php echo get_site_url(); ?>">
@@ -207,7 +207,7 @@ var queried_tags = false;
 
     <div class="row">
       <div class="top">
-        <a class="brand" href="/"><img src="/wp-content/uploads/2015/08/block_M_new.png" /><span>Center for Entrepreneurship</span></a>
+        <a class="brand" href="/"><img src="/wp-content/themes/cfe/assets/images/signature-stationery_3lines_white.png" /></a>
 
         <div class="address">
           <h6>
@@ -252,12 +252,14 @@ var queried_tags = false;
       <?php } ?>
       </div>
 
+      <div class="filters-list large"></div>
+
       <div class="tier-submit">
         <button class="call-out-blue">Submit</button>
       </div>
 
       <div class="sidebar-bottom">
-        <button class="call-out">Get Involved</button>
+        <button class="call-out"><?php echo $button->name ?></button>
 
         <div class="address">
           <h6>
@@ -265,12 +267,21 @@ var queried_tags = false;
             <span>CENTERFORENTREPRENEURSHIP@UMICH.EDU</span>
           </h6>
         </div>
+
+        <div class="links-newsletter">
+          <span><a href="#"><i class="fa fa-envelope-o"></i> Student Newsletter</a></span>
+          <span><a href="#"><i class="fa fa-envelope-o"></i> General Newsletter</a></span>
+        </div>
       </div>
 
       </section>
     </div>
 
     <div class="inner normal-view">
+
+      <div class="message">
+        <p>Oops! Looks like we don’t have anything that matches all of those criteria. Try widening your search by deselecting a tag or two.</p>
+      </div>
 
       <div data-target="feed" class="feed-ctl controls">
         <a class="content-forward"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
@@ -284,11 +295,11 @@ var queried_tags = false;
 
       <a class="back" href="#"><img src="/wp-content/uploads/2015/07/arrow-blue.png" />Back</a>
 
-      <div data-controls="feed-ctl" class="feed">
+      <div data-controls="feed-ctl" class="feed featured">
 
 
         <div class="content">
-          <?php if(is_single()) { ?>
+          <?php if(is_single() && isset($articles['articles'])) { ?>
             <?php foreach($articles['articles'] as $article) {
 
               $tpl = $mustache->loadTemplate('post');
@@ -317,7 +328,7 @@ var queried_tags = false;
   </div>
 </header>
 
-<script id="template-list" type="x-tmpl-mustache">
+<script id="template-featured" type="x-tmpl-mustache">
 <?php
 echo file_get_contents($root . '/wp-content/themes/cfe/templates/mustache/list.mustache');
 ?>
