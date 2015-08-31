@@ -137,7 +137,11 @@ var queried_tags = false;
 </script>
 
 <?php if(is_home()) { ?>
-<a class="brand" href="/"><img src="/wp-content/themes/cfe/assets/images/signature-stationery_3lines_white.png" /></a>
+<a class="brand" href="/">
+  <img src="/wp-content/themes/cfe/assets/images/m-logo.png" />
+
+  <div class="text"><span>Center for Entrepreneurship</span><span>College of Engineering</span></div>
+</a>
 
 <header class="banner" role="banner">
   <div class="container-fluid">
@@ -184,6 +188,7 @@ var queried_tags = false;
       <i class="fa fa-facebook"></i>
       <i class="fa fa-twitter"></i>
       <a href="https://www.youtube.com/user/UMCFE"><i class="fa fa-youtube"></i></a>
+      <a href="https://instagram.com/umcfe/"><i class="fa fa-instagram"></i></a>
     </div>
 
     <form class="search-form" method="get" action="<?php echo get_site_url(); ?>">
@@ -207,7 +212,12 @@ var queried_tags = false;
 
     <div class="row">
       <div class="top">
-        <a class="brand" href="/"><img src="/wp-content/themes/cfe/assets/images/signature-stationery_3lines_white.png" /></a>
+
+        <a class="brand" href="/">
+          <img src="/wp-content/themes/cfe/assets/images/m-logo.png" />
+
+          <div class="text"><span>Center for Entrepreneurship</span><span>College of Engineering</span></div>
+        </a>
 
         <div class="address">
           <h6>
@@ -239,20 +249,24 @@ var queried_tags = false;
           <i class="fa fa-minus"></i>
         </button>
 
+        <?php if(isset($item['items'])) { ?>
         <div class="collapse" id="<?php echo $item['group']->slug ?>">
           <div class="well">
           <?php foreach($item['items'] as $label) { ?>
             <div class="checkbox-custom">
-              <input id="<?php echo $item['group']->slug ?>-<?php echo $label->slug ?>" name="<?php echo $item['group']->slug ?>-<?php echo $label->slug ?>" data-term-name="<?php echo $label->name ?>" data-term-id="<?php echo $label->term_id ?>" class="checkbox-input <?php echo $item['group']->slug ?> <?php echo $label->slug ?>" type="checkbox" value="">
+              <input id="<?php echo $item['group']->slug ?>-<?php echo $label->slug ?>" name="<?php echo $item['group']->slug ?>-<?php echo $label->slug ?>" data-group="<?php echo $item['group']->slug ?>" data-term-name="<?php echo $label->name ?>" data-term-id="<?php echo $label->term_id ?>" class="checkbox-input <?php echo $item['group']->slug ?> <?php echo $label->slug ?>" type="checkbox" value="">
               <label for="<?php echo $item['group']->slug ?>-<?php echo $label->slug ?>" class="checkbox-custom-label"><span><?php echo $label->name ?></span></label>
             </div>
           <?php } ?>
           </div>
         </div>
+        <?php } ?>
+
+        <div class="tier-specific-list large <?php echo $item['group']->slug ?>-list"></div>
+
+
       <?php } ?>
       </div>
-
-      <div class="filters-list large"></div>
 
       <div class="tier-submit">
         <button class="call-out-blue">Submit</button>
@@ -284,13 +298,13 @@ var queried_tags = false;
       </div>
 
       <div data-target="feed" class="feed-ctl controls">
-        <a class="content-forward"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
-        <a class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
+        <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
+        <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
       </div>
 
       <div data-target="related" class="related-ctl controls">
-        <a class="content-forward"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
-        <a class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
+        <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
+        <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
       </div>
 
       <a class="back" href="#"><img src="/wp-content/uploads/2015/07/arrow-blue.png" />Back</a>

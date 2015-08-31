@@ -198,24 +198,34 @@ a.brand {
 	display: block;
 	position: absolute;
 	z-index: 8;
-    margin-left: 12px;
-    margin-top: 7px;
+    margin-left: 10px;
+    margin-top: 10px;
 	top: 0;
 	left: 0px;
 
 	img {
 		vertical-align: top;
-		width: 300px;
+		height: 32px;
+    	display: inline-block;
+	}
+
+	.text {
+	    display: inline-block;
+	    text-align: left;
 	}
 
 	span {
 		font-family: $font-fjalla;
-		font-weight: 400;
-		color: #fff;
-		text-transform: uppercase;
-		padding-left: 10px;
-	    margin-top: 9px;
-	    display: inline-block;
+	    font-weight: 400;
+	    color: #fff;
+	    text-transform: uppercase;
+	    padding-left: 10px;
+	    display: block;
+	    margin-top: -1px;
+	}
+
+	span:last-child {
+		font-size: 11px;
 	}
 }
 
@@ -293,10 +303,11 @@ a.brand {
 	top: 16px;
 }
 
-.filters-list.large {
+.tier-specific-list.large {
     color: #fff;
-    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 20px;
+    display: block;
 }
 
 .faux-tiers-container {
@@ -682,6 +693,7 @@ div.sidebar-bottom {
 		    text-transform: uppercase;
 		    display: block;
 		    padding-bottom: 5px;
+		    font-size: 1.30em;
     	}
     }
 }
@@ -1946,7 +1958,7 @@ div.landing {
 	header.main-content.content-expanded {
 		a.brand {
 			position: absolute;
-			margin-left: 12px;
+			margin-left: 10px;
 			text-align: left;
 		}
 
@@ -1967,7 +1979,7 @@ div.landing {
 		    width: auto;
 		    margin-top: 11px;
 		    text-align: left;
-		    margin-right: 12px;
+		    margin-right: 10px;
 
 		    display: block;
 
@@ -2023,13 +2035,12 @@ div.landing {
 
 body.mobile {
 
-	.filters-list.large {
+	.tier-specific-list.large {
 	    display: none;
 	}
 
 	a.brand {
 		img {
-			width: 250px;
 			padding-top: 5px;
 			padding-bottom: 5px;
 		}

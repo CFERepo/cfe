@@ -873,16 +873,40 @@
           total = checked.length;
 
           var items = [],
-          term_names = [];
+          term_names = [],
+          tiers = {};
 
           if(checked) {
             $(checked).each(function (index) {
 
+              var current_tier = $(this).data('group'),
+              current_term_name = $(this).data('term-name');
+
               items.push($(this).data('term-id'));
-              term_names.push($(this).data('term-name'));
+              term_names.push(current_term_name);
+
+              if(!(current_tier in tiers)) {
+                tiers[current_tier] = [];
+              }
+
+              tiers[current_tier].push(current_term_name);
 
             });
           } 
+
+          if(tiers) {
+
+            $.each(tiers, function(key, value) {
+
+              var term_list = tiers[key].join(", ");
+
+              console.log(key);
+              console.log(term_list);
+
+              $('.' + key + '-list').html('SELECTED: ' + term_list);
+
+            });
+          }
 
           if(items) {
 
@@ -1072,6 +1096,17 @@
             $(this).html($(this).html().replace(regEx, "<a href=\"mailto:$1\">$1</a>"));
         });
 
+
+        $('a').each(function() {
+           var a = new RegExp('/' + window.location.host + '/');
+           if(!a.test(this.href)) {
+               $(this).click(function(event) {
+                   event.preventDefault();
+                   event.stopPropagation();
+                   window.open(this.href, '_blank');
+               });
+           }
+        });
 
 
       },
