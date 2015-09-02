@@ -23,7 +23,7 @@ $font-family-base:        $font-family-sans-serif !default;
 $link-color: $alt1;
 $link-hover-color: $alt1;
 
-html {
+html.public {
 	background-color: #0095a5;
 }
 
@@ -305,7 +305,7 @@ a.brand {
 
 .tier-specific-list.large {
     color: #fff;
-    padding-bottom: 10px;
+    padding-bottom: 2px;
     padding-left: 20px;
     display: block;
 }
@@ -351,7 +351,7 @@ a.brand {
 	    text-transform: uppercase;
 	    padding: 0px;
 	    padding-left: 19px;
-	    margin-bottom: 5px;
+	    margin-bottom: 2px;
 
 	    max-height: 300px;
 
@@ -698,24 +698,62 @@ div.sidebar-bottom {
     }
 }
 
-div.sidebar button.call-out, .call-out {
+button {
+    border: 0px;
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    border-radius: 7px;
+    background-color: #008B9A;
+    font-family: $font-fjalla;
+    color: #fff;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+button.call-out {
 		background: #f1bf02;
 		color: #03415a;
 		padding: 10px;
-		font-size: 1.5em;
+		font-size: 1.2em;
 		text-transform: uppercase;
 	    font-family: "Fjalla One";
-	    margin-bottom: 15px;
+	    margin-bottom: 7px;
 	    text-transform: uppercase;
 	    border-radius: 7px;
 	    border: 0;
 	    text-align: center;
+
+	    width: 150px;
+
+	    a {
+	    	font-family: "Fjalla One";
+	    	color: inherit;
+	    }
+
+	    i {
+		    vertical-align: text-top;
+		    padding-right: 5px;
+		    font-size: 1.15em;
+	    }
 }
 
-div.sidebar button.call-out:hover, .call-out:hover {
+button.call-out:hover {
 		background: #FFCC00;
 }
 
+button.call-out.newsletter {
+    text-align: left;
+    background-color: #008B9A;
+    color: #fff;
+}
+
+button.call-out-blue {
+    text-align: center;
+    background-color: #03415a;
+    margin-bottom: 80px;
+    display: none;
+}
 
 .address {
 
@@ -751,29 +789,9 @@ div.sidebar {
 	padding-left: 0px;
 	padding-right: 0px;
 
-    button {
-	    border: 0px;
-	    width: 100%;
-	    text-align: left;
-	    padding: 10px;
-	    border-radius: 7px;
-	    background-color: #008B9A;
-	    font-family: $font-fjalla;
-	    color: #fff;
-	    margin-bottom: 5px;
-	    text-transform: uppercase;
-    }
-
     a.back {
     	display: none;
     }
-
-	button.call-out-blue {
-	    text-align: center;
-	    background-color: #03415a;
-	    margin-bottom: 80px;
-	    display: none;
-	}
 
 }
 
@@ -900,7 +918,7 @@ div.feed {
    	.image {
 		overflow: hidden;
 	    display: block;
-	    height: calc(100vh - 580px);
+	    height: calc(100vh - 500px);
 	    background-repeat: no-repeat;
 	    background-size: cover;
 	    background-position: center;
@@ -979,7 +997,7 @@ div.feed {
 
    	article {
 		padding: 0;
-		background: #D2EAFD;
+		background: #c7dbe0;
 		float: none;
 		width: 33%;
 		display: block;
@@ -1022,11 +1040,11 @@ div.feed {
    		}
    	}
 
-   	article:nth-child(even) {
+   	article.list.t1 {
    		background-color: #c7dbe0;
    	}
 
-   	article:nth-child(odd) {
+   	article.list.t2 {
    		background-color: #e4eef1;
    	}
 
@@ -2022,6 +2040,10 @@ div.landing {
 	.address {
 		text-align: left;
 		padding-top: 0px;
+	}
+
+	button.call-out {
+		width: 100%;
 	}
 
 

@@ -376,6 +376,10 @@
 
         } 
 
+
+
+
+
         // Refreshes content and run transitions after update
         var updateContent = function(data) {
 
@@ -401,6 +405,8 @@
 
             $( '.feed article'  ).attr( "data-show-item", false );
             $( '.related article' ).attr( "data-show-item", false );
+            $( '.feed article'  ).attr( "data-position", 0 );
+            $( '.related article' ).attr( "data-position", 0 );      
 
             //$( container ).stop().animate({ "opacity": 0}, 200, function() {
             //$( container ).stop().fadeTo( 300 , 0, function() {
@@ -419,16 +425,21 @@
 
               $('body').css('overflow', 'hidden');
 
+
               $.each( $grid, function( i, val ) {
 
                 $grid[val] = $('.' + val + ' .content').isotope({
                   itemSelector: 'article',
                   layoutMode: 'horizontal',
                   getSortData: {
-                    position: '[data-position]'
+                    position: function( itemElem ) { // function
+                      var position = $( itemElem ).attr('data-position');
+                      return parseFloat( position );
+                    }
                   },
                   containerStyle: null,
                   sortBy: 'position',
+                  sortAscending: true,
                   filter: function() {
 
                     var show = ($(this).attr( "data-show-item") === "true");
@@ -438,27 +449,19 @@
                   }
                 });
 
-                /*$grid[val].on( 'removeComplete',
-                  function( event, removedItems ) {
-                    console.log( 'Removed ' + removedItems.length + ' items' );
+                $grid[val].on( 'arrangeComplete', function( event, filteredItems ) {
 
-                    var articles = $('article', this);
+                  var articles = $('article:hidden');
 
-                    console.log(articles);
+                  $.each(articles, function( i, val ) {
 
-                    if(articles.length == 0) {
-                      this.isotope( 'destroy');
+                    $(this).remove();
 
-                      $('.related-container').hide();
-                      $('.feed div.content').empty();
-                      $('.related div.content').empty();
-                    }
-                  }
-                );*/
+                  });
+                  
+                });
 
               });
-
-
             }
 
             // Setup templates
@@ -493,6 +496,8 @@
               }  
 
               $.each(data.articles.concat(data.related), function( i, val ) {
+
+                console.log(val);
 
               	if(val) {
 
@@ -534,9 +539,20 @@
 	                    } else {
 
 	                      $( "." + val.type + " .article-" + val.uid ).attr('data-show-item', true);
-	                      $( "." + val.type + " .article-" + val.uid ).data( "position", val.position );
+                        $( "." + val.type + " .article-" + val.uid ).attr( "data-position", val.position );
+
+                        $grid[val.type].isotope('updateSortData').isotope();
 
 	                    }
+
+                      if(val.type == 'featured') {
+                        if(i % 2 == 0) {
+                          $( "." + val.type + " .article-" + val.uid ).addClass('t1').removeClass('t2');
+                        } else {
+                          $( "." + val.type + " .article-" + val.uid ).addClass('t2').removeClass('t1');
+                        }
+                      }
+
 
 
 	                } else {
@@ -554,10 +570,6 @@
               });
 
               if($('.inner').hasClass('grid-view')) {
-                $grid['featured'].isotope('updateSortData').isotope();
-                $grid['related'].isotope('updateSortData').isotope();
-
-
                 $grid['featured'].isotope();
                 $grid['related'].isotope();
               }
@@ -954,6 +966,7 @@
 
                       resetIsotope();
 
+                      $('.inner .message p').html($('.inner .message').data('results'));
                       $('.inner').addClass('no-results');
 
                       $("body").css("cursor", "auto");
@@ -1108,6 +1121,10 @@
            }
         });
 
+        if($('body').hasClass('error404')) {
+          $('.inner .message p').html($('.inner .message').data('error'));
+          $('.inner').addClass('no-results');
+        }
 
       },
       finalize: function() {

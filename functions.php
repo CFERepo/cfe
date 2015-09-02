@@ -39,4 +39,46 @@ function cfe_rewrite_rules() {
     );
 }
 
+function cfe_redirection_rules() {
+
+    $requested_path = esc_url_raw( $_SERVER['REQUEST_URI'] );
+    $requested_path = stripslashes( $requested_path );
+
+    $requested_path = untrailingslashit( $requested_path );
+    if ( empty( $requested_path ) ){
+        $requested_path = '/';
+    }
+
+    switch ($requested_path) {
+        case '/main':
+            $destination = '/tags/whats-cfe';
+            break;
+        case '/mtractrans':
+            $destination = '/tags/mtractrans';
+            break;
+        case '/grad':
+            $destination = '/tags/graduate';
+            break;
+        case '/elp':
+            $destination = '/tags/elp';
+            break;
+        case '/thestartup':
+            $destination = '/tags/the-startup';
+            break;
+        case '/jsg':
+            $destination = '/tags/jsg';
+            break;
+        default:
+            $destination = false;
+            break;
+    }
+
+    if($destination) {
+      wp_redirect( $destination, 301 ); 
+
+      exit();
+    }
+}
+
 add_action( 'init', 'cfe_rewrite_rules' );
+add_action( 'parse_request', 'cfe_redirection_rules', 0 );

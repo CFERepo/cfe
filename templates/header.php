@@ -72,7 +72,7 @@ $args = array(
   'order'                    => 'ASC',
   'hide_empty'               => 0,
   'hierarchical'             => 1,
-  'exclude'                  => '1',
+  'exclude'                  => '1,28,31,22,27,25,24,33',
   'include'                  => '',
   'number'                   => '',
   'taxonomy'                 => 'category',
@@ -273,6 +273,11 @@ var queried_tags = false;
       </div>
 
       <div class="sidebar-bottom">
+
+
+        <button class="call-out newsletter"><a href="#"><i class="fa fa-envelope-o"></i> Student Newsletter</a></button>
+        <button class="call-out newsletter"><a href="#"><i class="fa fa-envelope-o"></i> General Newsletter</a></button>
+
         <button class="call-out"><?php echo $button->name ?></button>
 
         <div class="address">
@@ -281,11 +286,6 @@ var queried_tags = false;
             <span>CENTERFORENTREPRENEURSHIP@UMICH.EDU</span>
           </h6>
         </div>
-
-        <div class="links-newsletter">
-          <span><a href="#"><i class="fa fa-envelope-o"></i> Student Newsletter</a></span>
-          <span><a href="#"><i class="fa fa-envelope-o"></i> General Newsletter</a></span>
-        </div>
       </div>
 
       </section>
@@ -293,8 +293,8 @@ var queried_tags = false;
 
     <div class="inner normal-view">
 
-      <div class="message">
-        <p>Oops! Looks like we don’t have anything that matches all of those criteria. Try widening your search by deselecting a tag or two.</p>
+      <div class="message" data-error="Oops! What you're looking for isn't here. Try filtering using the tags at the left to find what you need." data-results="Oops! Looks like we don’t have anything that matches all of those criteria. Try widening your search by deselecting a tag or two.">
+        <p></p>
       </div>
 
       <div data-target="feed" class="feed-ctl controls">
