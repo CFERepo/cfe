@@ -889,7 +889,7 @@
 
           var items = [],
           term_names = [],
-          tiers = {};
+          tiers = {'tier-1' : [], 'tier-2' : [], 'tier-3' : []};
 
           if(checked) {
             $(checked).each(function (index) {
@@ -913,12 +913,18 @@
 
             $.each(tiers, function(key, value) {
 
-              var term_list = tiers[key].join(", ");
+              if(!value.length) {
+                $('.' + key + '-list').html('');
+              } else {
+                var term_list = tiers[key].join(", ");
 
-              console.log(key);
-              console.log(term_list);
+                console.log(key);
+                console.log(term_list);
 
-              $('.' + key + '-list').html('SELECTED: ' + term_list);
+                $('.' + key + '-list').html('SELECTED: ' + term_list);
+              }
+
+
 
             });
           }
