@@ -298,12 +298,12 @@ var queried_tags = false;
       </div>
 
       <div data-target="feed" class="feed-ctl controls">
-        <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
+        <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/09/arrow-content-navigation-right.png" /></a>
         <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
       </div>
 
       <div data-target="related" class="related-ctl controls">
-        <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
+        <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/09/arrow-content-navigation-right.png" /></a>
         <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
       </div>
 
