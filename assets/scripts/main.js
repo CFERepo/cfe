@@ -209,10 +209,13 @@
 
           console.log(selected);
 
+          if(selected_tag == 'contribute') {
+            window.location.href = "/2015/08/27/get-involved-with-cfe/";
+            return false;
+          }
+
           $(selected).prop('checked', true).trigger("change");
           $(tier).collapse('show');
-
-
 
           $('header.banner').fadeOut(100);
 
@@ -1103,7 +1106,7 @@
 
         var regEx = /(\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)/;
      
-        $(".post, .address span").filter(function() {
+        $(".address span").filter(function() {
             return $(this).html().match(regEx);
         }).each(function() {
             $(this).html($(this).html().replace(regEx, "<a href=\"mailto:$1\">$1</a>"));

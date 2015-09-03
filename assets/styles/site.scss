@@ -626,8 +626,6 @@ div.top {
 
 	.social {
 		display: block;
-		padding-right: 10px;
-
 		padding-bottom: 20px;
 	}
 
@@ -635,7 +633,6 @@ div.top {
 	    background-color: #fff;
 	    padding: 5px;
 	    color: $alt6;
-	    margin-right: 5px;
 	    border-radius: 20px;
 	    width: 24px;
 	    height: 24px;
@@ -643,7 +640,11 @@ div.top {
 	    cursor: pointer;
 	}
 
-	.social i:last-child {
+	.social a {
+		margin-right: 5px;
+	}
+
+	.social a:last-child {
 		margin-right: 0px;
 	}
 
@@ -698,7 +699,12 @@ div.sidebar-bottom {
     }
 }
 
-button {
+a.button {
+	display: block;
+	width: 100%;
+}
+
+button, a.button {
     border: 0px;
     width: 100%;
     text-align: left;
@@ -711,7 +717,7 @@ button {
     text-transform: uppercase;
 }
 
-button.call-out {
+button.call-out, a.button.call-out {
 		background: #f1bf02;
 		color: #03415a;
 		padding: 10px;
@@ -726,6 +732,9 @@ button.call-out {
 
 	    width: 150px;
 
+	    margin: 0px auto;
+	    margin-bottom: 7px;
+
 	    a {
 	    	font-family: "Fjalla One";
 	    	color: inherit;
@@ -738,11 +747,11 @@ button.call-out {
 	    }
 }
 
-button.call-out:hover {
-		background: #FFCC00;
+button.call-out:hover, a.button.call-out:hover {
+	background: #FFCC00;
 }
 
-button.call-out.newsletter {
+button.call-out.newsletter, a.button.call-out.newsletter {
     text-align: left;
     background-color: #008B9A;
     color: #fff;
@@ -941,7 +950,34 @@ div.feed {
    		}
 
    		iframe {
-			width: 100%;
+			max-width: 100%;
+   		}
+
+   		.grid {
+   			clear: both;
+
+   			text-align: center;
+
+   			.person {
+				max-width: 250px;
+				display: inline-block;
+				vertical-align: top;
+				padding-right: 30px;
+
+   				.alignleft {
+   						float: none;
+   				}
+
+   				p {
+   					clear: both;
+   					text-align: left;
+   					max-width: 150px;
+   				}
+   			}
+
+   			.person > p {
+   				text-align: center;
+   			}
    		}
    	}
 
@@ -1069,7 +1105,7 @@ div.feed {
    	
    	a.read-more {
    		display: block;
-   		margin-top: 20px;
+   		margin-top: 5px;
    		font-size: 1.2em;
    		color: #2e98bc;
    	}
@@ -1859,6 +1895,12 @@ div.landing {
 				padding: 20px;
 				clear: both;
 		    }
+
+		   	.text {
+		   		iframe {
+		   			max-width: 50%;
+		   		}
+		   	}
 		}
 
 	}
@@ -2001,12 +2043,13 @@ div.landing {
 
 		    display: block;
 
-		    button.call-out {
+		    a.button.call-out {
 		    	display: none;
 		    }
 
 			.social {
 				display: inline-block;
+				padding-right: 10px;
 			}
 
 			.social i {
@@ -2018,13 +2061,6 @@ div.landing {
 				color: #fff;
 				background-color: $alt6;
 			}
-
-
-
-			.social i:last-child {
-				margin-right: 5px;
-			}
-
 
 			.search input { 
 				background-color: $alt1;
@@ -2042,7 +2078,7 @@ div.landing {
 		padding-top: 0px;
 	}
 
-	button.call-out {
+	button.call-out, a.button.call-out {
 		width: 100%;
 	}
 

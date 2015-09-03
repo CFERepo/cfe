@@ -157,7 +157,7 @@ var queried_tags = false;
             </a>
             <ul class="height-transition height-transition-hidden">
               <?php foreach($categories as $item) { ?>
-                <li class="main-<?php echo $item->slug ?>" data-parent-slug="<?php echo $root_category->slug ?>" data-slug="<?php echo $item->slug ?>"><a href="#"><?php echo $item->name ?></a></li>
+              <li class="main-<?php echo $item->slug ?>" data-parent-slug="<?php echo $root_category->slug ?>" data-slug="<?php echo $item->slug ?>"><a href="#"><?php echo $item->name ?></a></li>
               <?php } ?>
             </ul>
           </li>
@@ -182,11 +182,11 @@ var queried_tags = false;
 
   <div class="social-container">
 
-    <button class="call-out"><?php echo $button->name ?></button>
+    <a class="button call-out" href="/2015/08/27/get-involved-with-cfe/"><?php echo $button->name ?></a>
 
     <div class="social">
-      <i class="fa fa-facebook"></i>
-      <i class="fa fa-twitter"></i>
+      <a href="#"><i class="fa fa-facebook"></i></a>
+      <a href="#"><i class="fa fa-twitter"></i></a>
       <a href="https://www.youtube.com/user/UMCFE"><i class="fa fa-youtube"></i></a>
       <a href="https://instagram.com/umcfe/"><i class="fa fa-instagram"></i></a>
     </div>
@@ -275,10 +275,10 @@ var queried_tags = false;
       <div class="sidebar-bottom">
 
 
-        <button class="call-out newsletter"><a href="#"><i class="fa fa-envelope-o"></i> Student Newsletter</a></button>
-        <button class="call-out newsletter"><a href="#"><i class="fa fa-envelope-o"></i> General Newsletter</a></button>
+        <a class="button call-out newsletter" href="http://eepurl.com/bpVmtH"><i class="fa fa-envelope-o"></i> Student Newsletter</a>
+        <a class="button call-out newsletter" href="http://eepurl.com/1Bwij"><i class="fa fa-envelope-o"></i> General Newsletter</a>
 
-        <button class="call-out"><?php echo $button->name ?></button>
+        <a class="button call-out" href="/2015/08/27/get-involved-with-cfe/"><?php echo $button->name ?></a>
 
         <div class="address">
           <h6>
