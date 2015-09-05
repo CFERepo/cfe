@@ -314,26 +314,32 @@ var queried_tags = false;
         <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
       </div>
 
+      <div class="static">
+
+        <div class="content">
+
+          <a class="back" href="#">
+            <span>
+              <img src="/wp-content/uploads/2015/07/arrow-blue.png" />Back
+            </span>
+          </a>
+
+          <?php if(is_single() && isset($articles['articles'])) { ?>
+            <?php foreach($articles['articles'] as $article) {
+
+              $tpl = $mustache->loadTemplate('post');
+
+              echo $tpl->render((array)$article);
+            }
+            ?>
+          <?php } ?>
+        </div>
+      </div>
+
       <div data-controls="feed-ctl" class="feed featured">
 
         <div class="swiper-featured">
           <div class="content swiper-wrapper">
-
-            <a class="back" href="#">
-              <span>
-                <img src="/wp-content/uploads/2015/07/arrow-blue.png" />Back
-              </span>
-            </a>
-
-            <?php if(is_single() && isset($articles['articles'])) { ?>
-              <?php foreach($articles['articles'] as $article) {
-
-                $tpl = $mustache->loadTemplate('post');
-
-                echo $tpl->render((array)$article);
-              }
-              ?>
-            <?php } ?>
           </div>
         </div>
 

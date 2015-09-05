@@ -23,6 +23,10 @@
         filter_selected,
         x = document.cookie,
         momentum = 0,
+        containerStatic = $('.static'),
+        innerContainerStatic = $('.static div.content'),
+        targetContainer = false,
+        initialState = false;
 
         $grid = ['featured', 'related'];
 
@@ -197,12 +201,14 @@
 
 
 
-        $( ".start-container > ul > li > ul > li" ).on( "click", function() {
+        $( ".start-container > ul > li > ul > li > a" ).on( "click", function(e) {
+
+          e.preventDefault();
 
           var header_main = $('header.main-content');
 
-          var selected_parent = $(this).data('parent-slug');
-          var selected_tag = $(this).data('slug');
+          var selected_parent = $(this).parent().data('parent-slug');
+          var selected_tag = $(this).parent().data('slug');
 
           var selected = '.checkbox-input' + '.' + selected_parent + '.' + selected_tag;
 
@@ -221,8 +227,6 @@
 
           $('header.banner').fadeOut(100);
 
-          $( header_main ).fadeIn(1);
-
           $(header_main).addClass('content-expanded');
 
           $( header_main ).animate({
@@ -234,7 +238,7 @@
             $('body > a.brand').hide();
             $( "body" ).css( "backgroundColor", "#ffffff" );
 
-            setInitialState();
+            //setInitialState();
 
             setTimeout(showTooltips, 1000);
           });
@@ -389,9 +393,9 @@
                 }
               });
 
-              $grid[val].on( 'layoutComplete', function( event, filteredItems ) {
+              $grid[val].on( 'arrangeComplete', function( event, filteredItems ) {
 
-                console.log('layoutComplete');
+                console.log('arrangeComplete');
 
                 var articles = $('article:hidden');
 
@@ -406,6 +410,8 @@
                 } else {
                   relatedSwiper.update(true);
                 }
+
+                $("body").css("cursor", "auto");
 
               });
 
@@ -461,8 +467,6 @@
             featured_elements = '',
             related_elements = '';
 
-            window.scrollTo(0, 0);
-
             $( '.feed article'  ).attr( "data-show-item", false );
             $( '.related article' ).attr( "data-show-item", false );
             $( '.feed article'  ).attr( "data-position", 0 );
@@ -471,38 +475,33 @@
             //$( container ).stop().animate({ "opacity": 0}, 200, function() {
             //$( container ).stop().fadeTo( 300 , 0, function() {
 
-            // Scroll to top and reset scrollLeft position of content div
-            $( "div.feed" ).scrollLeft( 0 );
-            $( "div.related" ).scrollLeft( 0 );
-
             if(!data.related && (data.type == 'search' || data.articles.length == 1)) {
+              $('.inner').removeClass('grid-view').addClass('normal-view');
 
-              resetIsotope();
+                $(innerContainerStatic).removeClass('search');
 
-            } else {
+                $('.static div.content article').remove();
+                $('.static div.content h5').remove();
+                $('.static div.content div.no-results').remove();
 
-              $('.inner').addClass('grid-view');
-              $('.inner').removeClass('normal-view');
+                if(data.type == 'search') {
 
-            }
+                  document.title = 'Search';
 
-            // Setup templates
-            if(data.type == 'search') {
+                  $(innerContainerStatic).addClass('search');
 
-                $('.feed div.content article').remove();
-                $('.feed div.content h5').remove();
-                $('.feed div.content div.no-results').remove();
+                  $('a.back', innerContainerStatic).after('<h5>Search Results: <span>"' + data.query + '"</span></h5>');
 
-                $(innerContainer).addClass('search');
-
-                $('<h5>Search Results: <span>"' + data.query + '"</span></h5>').appendTo(innerContainer);
-
-                if(!data.articles) {
-                  $('<div class="extra no-results">No results found - try another search?</div>').appendTo(innerContainer);
+                  if(!data.articles) {
+                   $('<div class="extra no-results">No results found - try another search?</div>').appendTo(innerContainerStatic);
+                  }
                 }
-
             } else {
-                $(innerContainer).removeClass('search');
+
+              $(innerContainerStatic).parent().fadeOut( 20);
+
+              $('.inner').addClass('grid-view').removeClass('normal-view');
+
             }
 
             if(data.articles) {
@@ -510,8 +509,6 @@
               if(!$('.feed div.content').is(':visible')) {
                 $('.feed div.content').fadeIn();
               } 
-
-              $('.related-container').fadeIn();
 
               if(data.related) {
 
@@ -529,10 +526,6 @@
                 console.log(val);
 
               	if(val) {
-
-                  if(!$("." + val.type + " .content").data('isotope')) {
-                    initIsotope();
-                  }
 
 	              	// Use content specific template unless data type set
 	              	if(!data.type) {
@@ -561,6 +554,10 @@
 
 
 	                if($('.inner').hasClass('grid-view')) {
+
+                      if(!$("." + val.type + " .content").data('isotope')) {
+                        initIsotope();
+                      }
 
 	                    // Only append elements that don't exist
 	                    if ($( "." + val.type + " .article-" + val.uid)[0]) {
@@ -604,16 +601,9 @@
 
 
 	                } else {
-
                       var markup = Mustache.render(template, val);
 
-	                    $(container).css({'opacity' : 0});
-	                    $(markup).appendTo(innerContainer);
-
-                      $('.text', innerContainer).linkify({
-                        target: "_blank"
-                      });
-
+	                    $(markup).appendTo(innerContainerStatic);
 	                }
 
               	}
@@ -627,90 +617,59 @@
 
                 if(featured_elements) {
                   $grid['featured'].isotope( 'insert', $(featured_elements) );
+                } else {
+                  $grid['featured'].isotope();
                 }
                 
                 if(related_elements) {
                   $grid['related'].isotope( 'insert', $(related_elements) );
+                } else {
+                  $grid['related'].isotope();
                 }
+              } else {
+
+                  if(data.type == 'post') {
+                    document.title = data.articles[0].title;
+                  }
+
+                  showStaticPage();
+
               }
-
-            }
-
-            // Special handers for each data type here
-            if(data.type == 'search') {
-
-              $('.related-header span.line-item').empty();
-              $('.related div.content').empty();
-
-              // If controls not hidden, toggle
-              if($( ".controls" ).hasClass('toggle-show')) {
-                toggleControls();
-              }
-
-              document.title = 'Search';
-
-              $( container ).animate({"opacity": 1}, 200, function() {
-
-                // Don't show back button on first page
-                if(pagesTraversed > 1) {
-                  showBackBar();
-                }
-
-                postTasks();
-
-              });       
 
             } else {
 
-              // One element in array = single page, use title
-              if(!data.related && data.articles.length == 1) {
-
-                document.title = data.articles[0].title;
-
-                $( container ).animate({ "opacity": 1}, 200, function() {
-
-                  // If controls not hidden, toggle
-                  if($( ".controls" ).hasClass('toggle-show')) {
-                    toggleControls();
-                  }
-
-                  // Don't show back button on first page
-                  if(pagesTraversed > 1) {
-                    showBackBar();
-                  }
-
-                  postTasks();
-
-                });    
-
-              } else {
-
-                hideBackBar();
-
-                $( container ).animate({ "opacity": 1}, 200, function() {
-
-                  resizeTasks();
-
-                  // If controls already visible, don't hide them
-                  if(!$( ".controls" ).hasClass('toggle-show')) {
-                    toggleControls();
-                  } else {
-                    toggleControlVisibility();
-                  }
-
-                  postTasks();
-                  
-                });   
+              if(data.type == 'Search') {
+                showStaticPage();
               }
-
-
+              
             }
 
 
+
+
           } else {
-            postTasks();
+            //postTasks();
           }
         };
+
+        // Show page with no dynamic elements
+        function showStaticPage() {
+
+          $('.text', innerContainerStatic).linkify({
+            target: "_blank"
+          });
+
+          $(innerContainerStatic).parent().fadeIn( 200, function() {
+
+              $("body").css("cursor", "auto");
+
+              // Don't show back button on first page
+              if(pagesTraversed > 1) {
+                showBackBar();
+              }
+
+          });
+        }
 
         // Run after all animations complete
         function postTasks() {
@@ -1008,8 +967,6 @@
 
                     } else {
 
-                      resetIsotope();
-
                       $('.inner .message p').html($('.inner .message').data('results'));
                       $('.inner').addClass('no-results');
 
@@ -1107,7 +1064,7 @@
 
           $('.social-container').css( 'display', 'block' );
 
-          var articles = $('.feed div.content > article');
+          var articles = $('.static div.content > article');
           var tags = [];
 
 
@@ -1139,6 +1096,8 @@
             $('.checkbox-input.whats-cfe').prop('checked', true).trigger("change");
           } else {
             $(".tiers-container div.collapse:first-of-type").collapse('toggle');
+
+            showStaticPage();
           }
         }
 
