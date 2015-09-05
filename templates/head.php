@@ -2,11 +2,12 @@
 
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<?php wp_head(); ?>
 	<link href='http://fonts.googleapis.com/css?family=Fjalla+One|Open+Sans:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="/wp-content/themes/cfe/assets/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/wp-content/themes/cfe/assets/scrollbar/jquery.mCustomScrollbar.min.css" />
+	<link rel="stylesheet" href="/wp-content/themes/cfe/assets/styles/swiper.min.css" />
 
 	<link rel="stylesheet" href="/wp-content/themes/cfe/assets/styles/animate.css" />
 
@@ -26,5 +27,7 @@
 	<meta name="msapplication-TileColor" content="#03415a">
 	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<meta name="theme-color" content="#03415a">
+
+	
 
 </head>

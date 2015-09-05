@@ -1,11 +1,16 @@
 <?php
 
 $queried_tags = false;
+$view = false;
 
 if(is_home()) {
   $base = false;
+
+  $view = 'grid-view';
 } else if(is_single()) {
   $base = get_permalink();
+
+  $view = 'normal-view';
 } else if(is_category()) {
   $base = get_site_url() . '/tags/' . $wp_query->query['category_name'] . '/';
 
@@ -22,6 +27,8 @@ if(is_home()) {
   } else {
     $queried_tags = false;
   }
+
+  $view = 'grid-view';
   
 }
 
@@ -185,10 +192,10 @@ var queried_tags = false;
     <a class="button call-out" href="/2015/08/27/get-involved-with-cfe/"><?php echo $button->name ?></a>
 
     <div class="social">
-      <a href="#"><i class="fa fa-facebook"></i></a>
-      <a href="#"><i class="fa fa-twitter"></i></a>
-      <a href="https://www.youtube.com/user/UMCFE"><i class="fa fa-youtube"></i></a>
-      <a href="https://instagram.com/umcfe/"><i class="fa fa-instagram"></i></a>
+      <a target="_blank" href="https://www.facebook.com/cfe.UofM"><i class="fa fa-facebook"></i></a>
+      <a target="_blank" href="https://twitter.com/UMCFE"><i class="fa fa-twitter"></i></a>
+      <a target="_blank" href="https://www.youtube.com/user/UMCFE"><i class="fa fa-youtube"></i></a>
+      <a target="_blank" href="https://instagram.com/umcfe/"><i class="fa fa-instagram"></i></a>
     </div>
 
     <form class="search-form" method="get" action="<?php echo get_site_url(); ?>">
@@ -275,8 +282,8 @@ var queried_tags = false;
       <div class="sidebar-bottom">
 
 
-        <a class="button call-out newsletter" href="http://eepurl.com/bpVmtH"><i class="fa fa-envelope-o"></i> Student Newsletter</a>
-        <a class="button call-out newsletter" href="http://eepurl.com/1Bwij"><i class="fa fa-envelope-o"></i> General Newsletter</a>
+        <a class="button call-out newsletter" target="_blank" href="http://eepurl.com/bpVmtH"><i class="fa fa-envelope-o"></i> Student Newsletter</a>
+        <a class="button call-out newsletter" target="_blank" href="http://eepurl.com/1Bwij"><i class="fa fa-envelope-o"></i> General Newsletter</a>
 
         <a class="button call-out" href="/2015/08/27/get-involved-with-cfe/"><?php echo $button->name ?></a>
 
@@ -291,9 +298,9 @@ var queried_tags = false;
       </section>
     </div>
 
-    <div class="inner normal-view">
+    <div class="inner <?php echo $view ?>">
 
-      <div class="message" data-error="Oops! What you're looking for isn't here. Try filtering using the tags at the left to find what you need." data-results="Oops! Looks like we don’t have anything that matches all of those criteria. Try widening your search by deselecting a tag or two.">
+      <div class="message" data-search="No results found - try another search?" data-error="Oops! What you're looking for isn't here. Try filtering using the tags at the left to find what you need." data-results="Oops! Looks like we don’t have anything that matches all of those criteria. Try widening your search by deselecting a tag or two.">
         <p></p>
       </div>
 
@@ -307,29 +314,38 @@ var queried_tags = false;
         <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
       </div>
 
-      <a class="back" href="#"><img src="/wp-content/uploads/2015/07/arrow-blue.png" />Back</a>
-
       <div data-controls="feed-ctl" class="feed featured">
 
+        <div class="swiper-featured">
+          <div class="content swiper-wrapper">
 
-        <div class="content">
-          <?php if(is_single() && isset($articles['articles'])) { ?>
-            <?php foreach($articles['articles'] as $article) {
+            <a class="back" href="#">
+              <span>
+                <img src="/wp-content/uploads/2015/07/arrow-blue.png" />Back
+              </span>
+            </a>
 
-              $tpl = $mustache->loadTemplate('post');
+            <?php if(is_single() && isset($articles['articles'])) { ?>
+              <?php foreach($articles['articles'] as $article) {
 
-              echo $tpl->render((array)$article);
-            }
-            ?>
-          <?php } ?>
+                $tpl = $mustache->loadTemplate('post');
+
+                echo $tpl->render((array)$article);
+              }
+              ?>
+            <?php } ?>
+          </div>
         </div>
+
+
 
       </div>
 
-      <div class="related-container">
-
+      <div class="related-wrapper">
         <div data-controls="related-ctl" class="related">
-          <div class="content">
+          <div class="swiper-related">
+            <div class="content swiper-wrapper">
+            </div>
           </div>
         </div>
       </div>

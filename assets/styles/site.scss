@@ -27,18 +27,26 @@ html.public {
 	background-color: #0095a5;
 }
 
-body {
+html {
+	overflow: hidden;
+}
+
+html, body {
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
 }
 
-body.mobile {
-	overflow: visible !important;
+body {
+	position: fixed;
 }
 
-* {
-  -webkit-overflow-scrolling: touch;
+html.mobile {
+	overflow: visible !important;
+
+	body {
+		overflow: visible !important;
+	}
 }
 
 select::-ms-expand {
@@ -97,6 +105,8 @@ a, a:visited, a:active, a:focus, a:hover {
 	font-family: $font-stack;
     font-weight: normal !important;
     color: #2e98bc;
+
+    outline: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -180,12 +190,6 @@ p.alt2, .restaurant-faq .question {
 
 li, div {
 	font-family: $font-stack;
-}
-
-.table-row {
-	display: table;
-	overflow: hidden;
-	background-color: #fff;
 }
 
 a, a:hover {
@@ -306,8 +310,9 @@ a.brand {
 .tier-specific-list.large {
     color: #fff;
     padding-bottom: 2px;
-    padding-left: 20px;
+    padding-left: 10px;
     display: block;
+    font-size: .875em;
 }
 
 .faux-tiers-container {
@@ -322,8 +327,6 @@ a.brand {
 
 .tiers-container {
 
-    overflow: visible;
-    z-index: 5;
     position: relative;
     background-color: #0095a5;
     display: none;
@@ -363,7 +366,7 @@ a.brand {
 		.checkbox-custom input, .checkbox-custom-label {
 		    display: inline-block;
 		    vertical-align: middle;
-		    margin: 5px;
+		    margin: 3px;
 		    cursor: pointer;
 		}
 
@@ -407,6 +410,7 @@ a.brand {
 	transition: border-color 0.3s linear;
 
 	animation-fill-mode: forwards;
+
 }
 
 .border-fill {
@@ -426,9 +430,10 @@ a.brand {
 		font-size: 2em;
 		color: #fff;
 		text-transform: uppercase;
-		display: inline-block;
+		display: block;
 		width: 100%;
 		padding: 20px;
+		z-index: 10;
 	}
 
 	a > span {
@@ -576,10 +581,6 @@ header.main-content.content-expanded {
 	padding-left: 0px;
 	padding-right: 0px;
 
-	div.sidebar {
-		position: static;
-	}
-
 	div.top {
 		position: fixed;
 		left: 0;
@@ -602,7 +603,7 @@ div.top {
 	background-color: $alt1;
 	height: $top-nav-height;
 	width: 100%;
-    z-index: 9;
+    z-index: 3;
 }
 
 .social-container {
@@ -616,7 +617,6 @@ div.top {
     background-color: #0095a5;
     padding: 40px;
     padding-top: 120px;
-    z-index: 8;
     height: 400px;
     margin-top: 100px;
     width: 100%;
@@ -680,8 +680,9 @@ div.top {
 div.sidebar-bottom {
 
     position: absolute;
-    bottom: 0px;
-    z-index: 1;
+    bottom: 0;
+    display: none;
+    width: 263px;
     display: none;
 
     width: 100%;
@@ -788,15 +789,15 @@ button.call-out-blue {
 
 div.sidebar {
     background-color: $alt6;
-    min-height: 200px;
     width: 100%;
     padding-top: $top-nav-height;
     position: absolute;
     left: 0px;
     top: 0px;
-    z-index: 7;
 	padding-left: 0px;
 	padding-right: 0px;
+
+	z-index: 2;
 
     a.back {
     	display: none;
@@ -839,6 +840,8 @@ header.main-content.content-expanded .sidebar.open {
 
 .controls {
 
+	overflow: hidden;
+
 	a {
 		background-color: rgba(0,149,165,0.7);
 		position: fixed;
@@ -873,6 +876,13 @@ header.main-content.content-expanded .sidebar.open {
 	}
 }
 
+.feed-ctl {
+	a {
+		top: 50px;
+		z-index: 1;
+	}
+}
+
 .related-ctl.controls {
 	a {
 		height: 150px;
@@ -885,14 +895,18 @@ header.main-content.content-expanded .sidebar.open {
 a.back {
 	position: relative;
 	background-color: #bfe6f0;
-	padding: 15px;
 	font-size: 1.3em;
 	margin-top: 0px;
 	top: 0px;
-	z-index: 3;
+	z-index: 1;
 	width: 100%;
 	color: #2e98bc !important;
 	display: none;
+
+	span {
+	    padding: 13px;
+	    display: block;
+	}
 
 	font-family: $font-fjalla;
 
@@ -906,22 +920,16 @@ a.back:hover, a.back:visited, a.back:focus {
 	color: #2e98bc !important;
 }
 
-div.inner {
-	position: relative;
-	overflow: hidden;
-}
-
 div.feed {
     width: 100%;
     background-color: #0095a5;
 	position: relative;
     overflow: hidden;
-    z-index: 2;
 
    	.image {
 		overflow: hidden;
 	    display: block;
-	    height: calc(100vh - 500px);
+	    height: calc(100vh - 490px);
 	    background-repeat: no-repeat;
 	    background-size: cover;
 	    background-position: center;
@@ -977,20 +985,21 @@ div.feed {
 
    	.content {
    		position: relative;
-		display: table;
-		table-layout: auto;
    	}
 
    	.content > h5 {
    		display: none;
    	}
 
+   	.content > .extra {
+   		display: none;
+   	}
+
    	.content.search {
    		display: block;
-   		table-layout: auto;
 
    		h5 {
-		    padding: 30px;
+		    padding: 50px;
 		    padding-bottom: 5px;
 		    font-family: $font-fjalla;
 		    color: $alt2;
@@ -1015,8 +1024,12 @@ div.feed {
 		    padding: 0px;
    		}
 
+   		.extra {
+   			display: block;
+   		}
+
    		.no-results {
-   			padding: 30px;
+   			padding: 50px;
    		}
 
    		article img {
@@ -1048,7 +1061,7 @@ div.feed {
    	article.search {
 
    		width: 100%;
-   		padding: 30px;
+   		padding: 50px;
    		display: block;
    		padding-bottom: 0px;
    		float: left;
@@ -1092,7 +1105,8 @@ div.feed {
 	    	height: auto;
 
 	    	img {
-	    		width: 100%;
+			    width: 100%;
+			    max-height: 500px;
 	    	}
 	    }
    	}
@@ -1105,37 +1119,44 @@ div.feed {
    	}
 }
 
+.related-wrapper {
+	position: relative;
+}
 
-div.related .content:before {
+div.related:before {
     content: "";
     position: absolute;
     width: 100%;
-    height: 200px;
-	top: -50px;
+    height: 40px;
+    bottom: -20px;
     background-color: #fff;
-    z-index: -1;
-    left: 0px;
+    z-index: 1;
+    left: 0;
+    overflow: hidden;
+    top: 0px;
 }
 
-div.related .content:after {
+div.related:after {
     font-family: "Fjalla One";
     color: #0095a5;
     font-size: 1.2em;
     text-transform: uppercase;
     content: "Related Content";
-    position: fixed;
+    position: absolute;
     width: 500px;
     height: 50px;
-    z-index: -1;
+    z-index: 2;
     left: 0;
     text-align: left;
     padding-left: 19px;
-    bottom: 126px;
-    left: 263px;
+    top: 4px;
+    left: 0px;
+    overflow: hidden;
 }
 
 div.related-container {
 	display: none;
+    overflow: hidden;
 }
 
 div.related-header {
@@ -1155,7 +1176,6 @@ div.related-header {
 div.related {
 
     width: 100%;
-	position: relative;
     z-index: 1;
     cursor: pointer;
     overflow: hidden;
@@ -1207,8 +1227,6 @@ div.related {
 	}
 
     .content {
-	    display: table;
-	    table-layout: auto;
 	    text-align: center;
 
 	    position: relative;
@@ -1217,7 +1235,7 @@ div.related {
 	article {
 	    padding: 0;
 	    float: none;
-	    display: inline-block;
+	    display: block;
 	    vertical-align: top;
 	    margin: 0;
 	}
@@ -1731,7 +1749,6 @@ header.banner {
 }
 
 header.main-content {
-    z-index: 7;
     position: absolute;
     right: 0;
     top: 0;
@@ -1825,24 +1842,32 @@ div.landing {
 }
 
 
-/* Fix overflow in normal view */
 .inner.normal-view {
-	div.feed {
-		overflow: auto;
-	}
 
-	.related-container {
+	.related {
 		display: none !important;
 	}
 
 	.controls {
 		display: none !important;
 	}
+
 }
 
 .inner.no-results {
+
+	position: static;
+
+	div.feed {
+		background-color: #0095a5 !important;
+	}
+
 	.message {
 		display: block;
+	}
+
+	a.back {
+		display: none;
 	}
 }
 
@@ -1900,9 +1925,37 @@ div.landing {
 	}
 }
 
+/* Scrollbar height */
+@media only screen and (max-height : 620px) {
+	.tiers-container {
+		max-height: 355px;
+	}
+
+	.tiers-container > .mCustomScrollBox {
+		max-height: 350px;
+	}
+}
+
  
 /* Small Devices, Tablets */
-@media only screen and (min-width : 620px) {
+@media only screen and (min-width : 769px) {
+
+	.container-fluid {
+		height: 100%;
+	}
+
+	.inner.normal-view {
+		div.feed {
+	    	height: 100%;
+		    background-color: #fff;
+		}
+
+		.content {
+		    overflow-y: scroll;
+		    height: 100%;
+		}
+
+	}
 
 	.message {
 
@@ -1933,6 +1986,13 @@ div.landing {
 		display: block;
 	}
 
+	.inner {
+		padding-top: 50px;
+		height: 100%;
+
+		padding-left: 263px;
+	}
+
 	.inner.grid-view {
 		div.feed {
 			.content {
@@ -1942,21 +2002,17 @@ div.landing {
 	}
 
 	div.feed {
-		padding-top: $top-nav-height;
-
-		.content {
-			table-layout: fixed;
-			padding-left: 262px;
-			min-height: 350px;
-		}
-
-		article {
-			display: table-cell;
-		}
 
 		article.post {
 		    padding-left: 50px;
 		    padding-right: 50px;
+
+		    .image {
+
+		    	img {
+				    width: 100%;
+		    	}
+		    }
 		}
 
 	   	article.list {
@@ -1972,26 +2028,17 @@ div.landing {
 
 	div.related {
 
-		padding-top: 0px;
+	    padding-top: 0;
+	    /* height: 200px; */
 
-		height: 200px;
-
-		padding-left: 263px;
-
-		position: fixed;
-		bottom: 0px;
+	    display: none;
 
 		.content {
-			table-layout: fixed;
-			height: 180px;
-			margin-top: 50px;
+			height: 150px;
+			margin-top: 30px;
 		}
 
-		article {
-			display: table-cell;
-		}
-
-		article img {
+		article, article img {
 		    width: 150px;
 		    height: 150px;
 		}
@@ -2003,13 +2050,20 @@ div.landing {
 		bottom: 0px;
 		top: auto;
 		margin-top: 20px;
+		width: 263px;
 	}
 
 	a.back {
-		padding-left: 285px;
+		padding-left: 35px;
+
+		height: 0px;
+		overflow: hidden;
 	}
 
 	header.main-content.content-expanded {
+
+		display: block;
+
 		a.brand {
 			position: absolute;
 			margin-left: 10px;
@@ -2017,7 +2071,7 @@ div.landing {
 		}
 
 		div.sidebar {
-			position: fixed;
+			overflow: hidden;
 		}
 
 		.social-container {
@@ -2085,7 +2139,26 @@ div.landing {
 	}
 }
 
-body.mobile {
+html.mobile {
+
+	position: static;
+
+	body {
+		position: static;
+
+	}
+
+	.tiers-container {
+		max-height: auto !important;
+	}
+
+	.tiers-container > .mCustomScrollBox {
+		max-height: auto !important;
+	}
+
+	a.back {
+		height: 50px !important;
+	}
 
 	.tier-specific-list.large {
 	    display: none;
@@ -2103,6 +2176,9 @@ body.mobile {
 	}
 
 	header.main-content.content-expanded {
+
+		height: auto;
+
 		padding-bottom: 400px;
 
 		a.brand {
@@ -2111,6 +2187,11 @@ body.mobile {
 
 		.address {
 			padding-top: 0px;
+		}
+
+		/* Static sidebar for mobile */
+		div.sidebar {
+			position: static;
 		}
 
 		position: relative; /* fix footer */
@@ -2126,6 +2207,10 @@ body.mobile {
 		right: auto !important;
 		bottom: auto !important;
 		top: auto !important;
+	}
+
+	div.feed {
+		min-height: 900px;
 	}
 
 	div.feed .content {
@@ -2159,6 +2244,19 @@ body.mobile {
 	    left: 0px;
 	    top: 8px;
 	    position: absolute;
+	}
+
+}
+
+
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+
+	.inner.grid-view div.feed .content {
+		height: 441px;
+	}
+
+	div.feed .image {
+		height: calc(100vh - 600px);
 	}
 
 }

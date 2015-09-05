@@ -32,13 +32,13 @@
 
         function mobileCheck() {
           // Check if mobile...
-          if (Modernizr.mq('(max-width: 619px)')) {
-              $('body').addClass('mobile');
+          if (Modernizr.mq('(max-width: 768px)')) {
+              $('html').addClass('mobile');
           } else {
 
               resetElements();
 
-              $('body').removeClass('mobile');
+              $('html').removeClass('mobile');
 
 
 
@@ -61,6 +61,8 @@
           mobileCheck();
 
           resizeTasks();
+
+
         });
 
         $(window).load(function(e) {
@@ -289,6 +291,8 @@
         // Handle back button for sidebar in mobile view - not a history event
         $( ".sidebar a.back" ).on( "click", function(e) {
 
+          e.preventDefault();
+
           var sidebar = $('.sidebar');
 
           $( '.sidebar-inner' ).fadeOut( 200, function() {
@@ -355,6 +359,59 @@
 
         }
 
+
+        function initIsotope() {
+            $.each( $grid, function( i, val ) {
+
+              if($('html').hasClass('mobile')) {
+                var mode = 'vertical';
+              } else {
+                var mode = 'horizontal';
+              }
+
+              $grid[val] = $('.' + val + ' .content').isotope({
+                itemSelector: 'article',
+                layoutMode: 'horizontal',
+                getSortData: {
+                  position: function( itemElem ) { // function
+                    var position = $( itemElem ).attr('data-position');
+                    return parseFloat( position );
+                  }
+                },
+                sortBy: 'position',
+                sortAscending: true,
+                filter: function() {
+
+                  var show = ($(this).attr( "data-show-item") === "true");
+
+                  // If true, show
+                  return show;
+                }
+              });
+
+              $grid[val].on( 'layoutComplete', function( event, filteredItems ) {
+
+                console.log('layoutComplete');
+
+                var articles = $('article:hidden');
+
+                $.each(articles, function( i, val ) {
+
+                  $(this).remove();
+
+                });
+
+                if(val == 'featured') {
+                  featuredSwiper.update(true);
+                } else {
+                  relatedSwiper.update(true);
+                }
+
+              });
+
+            });
+        }
+
         function resetIsotope() {
 
             $.each( $grid, function( i, val ) {
@@ -368,14 +425,12 @@
            
             });
 
-            $('body').css('overflow', 'auto');
-
             $('.inner').removeClass('grid-view');
             $('.inner').addClass('normal-view');
 
             $('.related-container').hide();
 
-            $('.feed div.content').add('.related div.content').empty();
+            $('.feed div.content article').add('.related div.content article').remove();
 
         } 
 
@@ -402,7 +457,9 @@
             related_list = $('.related article');
 
             var container = $('.inner');
-            var innerContainer = $('.feed div.content');
+            var innerContainer = $('.feed div.content'),
+            featured_elements = '',
+            related_elements = '';
 
             window.scrollTo(0, 0);
 
@@ -416,6 +473,7 @@
 
             // Scroll to top and reset scrollLeft position of content div
             $( "div.feed" ).scrollLeft( 0 );
+            $( "div.related" ).scrollLeft( 0 );
 
             if(!data.related && (data.type == 'search' || data.articles.length == 1)) {
 
@@ -426,58 +484,21 @@
               $('.inner').addClass('grid-view');
               $('.inner').removeClass('normal-view');
 
-              $('body').css('overflow', 'hidden');
-
-
-              $.each( $grid, function( i, val ) {
-
-                $grid[val] = $('.' + val + ' .content').isotope({
-                  itemSelector: 'article',
-                  layoutMode: 'horizontal',
-                  getSortData: {
-                    position: function( itemElem ) { // function
-                      var position = $( itemElem ).attr('data-position');
-                      return parseFloat( position );
-                    }
-                  },
-                  containerStyle: null,
-                  sortBy: 'position',
-                  sortAscending: true,
-                  filter: function() {
-
-                    var show = ($(this).attr( "data-show-item") === "true");
-
-                    // If true, show
-                    return show;
-                  }
-                });
-
-                $grid[val].on( 'arrangeComplete', function( event, filteredItems ) {
-
-                  var articles = $('article:hidden');
-
-                  $.each(articles, function( i, val ) {
-
-                    $(this).remove();
-
-                  });
-                  
-                });
-
-              });
             }
 
             // Setup templates
             if(data.type == 'search') {
 
-                $('.feed div.content').empty();
+                $('.feed div.content article').remove();
+                $('.feed div.content h5').remove();
+                $('.feed div.content div.no-results').remove();
 
                 $(innerContainer).addClass('search');
 
                 $('<h5>Search Results: <span>"' + data.query + '"</span></h5>').appendTo(innerContainer);
 
                 if(!data.articles) {
-                  $('<div class="no-results">No results found - try another search?</div>').appendTo(innerContainer);
+                  $('<div class="extra no-results">No results found - try another search?</div>').appendTo(innerContainer);
                 }
 
             } else {
@@ -493,6 +514,11 @@
               $('.related-container').fadeIn();
 
               if(data.related) {
+
+                if(!$('.related div.content').is(":visible")) {
+                  $('.related').fadeIn();
+                }
+
                 if(!$('.related div.content').is(':visible')) {
                   $('.related div.content').fadeIn();
                 } 
@@ -503,6 +529,10 @@
                 console.log(val);
 
               	if(val) {
+
+                  if(!$("." + val.type + " .content").data('isotope')) {
+                    initIsotope();
+                  }
 
 	              	// Use content specific template unless data type set
 	              	if(!data.type) {
@@ -529,39 +559,60 @@
 	                  }
 	                }
 
-	                var markup = Mustache.render(template, val);
 
 	                if($('.inner').hasClass('grid-view')) {
 
 	                    // Only append elements that don't exist
-	                    if (!$( "." + val.type + " .article-" + val.uid)[0]) {
-
-	                      $grid[val.type].isotope( 'insert', $(markup) );
-
-	                      //$(markup).appendTo(innerContainer);
-	                    } else {
+	                    if ($( "." + val.type + " .article-" + val.uid)[0]) {
 
 	                      $( "." + val.type + " .article-" + val.uid ).attr('data-show-item', true);
                         $( "." + val.type + " .article-" + val.uid ).attr( "data-position", val.position );
 
-                        $grid[val.type].isotope('updateSortData').isotope();
-
-	                    }
-
-                      if(val.type == 'featured') {
                         if(i % 2 == 0) {
                           $( "." + val.type + " .article-" + val.uid ).addClass('t1').removeClass('t2');
                         } else {
                           $( "." + val.type + " .article-" + val.uid ).addClass('t2').removeClass('t1');
                         }
+
+                        $grid[val.type].isotope('updateSortData');
+
+	                    } else {
+
+                        if(i % 2 == 0) {
+                          val.elementIndex = '1';
+                        } else {
+                          val.elementIndex = '2';
+                        }
+
+                        var markup = Mustache.render(template, val);
+
+                        if(val.type == 'featured') {
+                          featured_elements += markup;
+                        } else {
+                          related_elements += markup;
+                        }
                       }
+
+                      /*if(val.type == 'featured') {
+                        if(i % 2 == 0) {
+                          $( "." + val.type + " .article-" + val.uid ).addClass('t1').removeClass('t2');
+                        } else {
+                          $( "." + val.type + " .article-" + val.uid ).addClass('t2').removeClass('t1');
+                        }
+                      }*/
 
 
 
 	                } else {
 
+                      var markup = Mustache.render(template, val);
+
 	                    $(container).css({'opacity' : 0});
 	                    $(markup).appendTo(innerContainer);
+
+                      $('.text', innerContainer).linkify({
+                        target: "_blank"
+                      });
 
 	                }
 
@@ -573,8 +624,14 @@
               });
 
               if($('.inner').hasClass('grid-view')) {
-                $grid['featured'].isotope();
-                $grid['related'].isotope();
+
+                if(featured_elements) {
+                  $grid['featured'].isotope( 'insert', $(featured_elements) );
+                }
+                
+                if(related_elements) {
+                  $grid['related'].isotope( 'insert', $(related_elements) );
+                }
               }
 
             }
@@ -715,10 +772,10 @@
 
           $( element ).css( "display", "block");
 
-          if($('body').hasClass('mobile')) {
-            $( element ).animate({ "marginTop": "0px", "marginBottom": "0px" }, "fast" );
+          if($('html').hasClass('mobile')) {
+            $( element ).animate({ "height": "0px" }, "fast" );
           } else {
-            $( element ).animate({ "marginTop": "50px", "marginBottom": "-50px" }, "fast" );
+            $( element ).animate({ "height": "50px" }, "fast" );
           }
           
         }
@@ -729,6 +786,7 @@
 
           $(element).css( "marginTop", "0px" );
           $(element).css( "marginBottom", "0px" );
+          $(element).css( "height", "0px" );
           $(element).hide();
           
         }
@@ -845,29 +903,6 @@
 
 
         }
-
-        $('div.feed, div.related').on('mousewheel', function(event) {
-
-            if($('.inner').hasClass('grid-view') && !$('body').hasClass('mobile')) {
-
-              var controls = $(this).data('controls');
-
-              // Decrease speed for trackpad
-              if(Math.abs(event.deltaY) >= 40)
-                  event.deltaY/=40;
-              if(Math.abs(event.deltaX) >= 40)
-                  event.deltaX/=40;
-
-              if(event.deltaY > 0) {
-                moveForward($(this), event.deltaY + 40, 0);
-              } else {
-                moveBack($(this), event.deltaY + 40, 0);
-              }
-
-              //console.log(event.deltaX, event.deltaY, event.deltaFactor);
-            }
-
-        });
 
         $(".faux-tiers-container button").on( "click", function(e) {
 
@@ -1022,6 +1057,12 @@
 
           $("body").css("cursor", "progress");
 
+          var query = $('input', this).val();
+
+          if(!query) {
+            return false;
+          }
+
           $.ajax({
               url: '/wp-admin/admin-ajax.php',
               data: {
@@ -1033,7 +1074,7 @@
                   
                   data = jQuery.parseJSON(data);
 
-                  if(data.articles) {
+                  if(data) {
 
                     console.log(data);
 
@@ -1098,36 +1139,62 @@
             $('.checkbox-input.whats-cfe').prop('checked', true).trigger("change");
           } else {
             $(".tiers-container div.collapse:first-of-type").collapse('toggle');
-            $('body').css('overflow', 'auto');
           }
         }
 
+        var featuredSwiper = $('.featured .swiper-featured').swiper({
+          //Your options here:
+          mode: 'horizontal',
+          slidesPerView: 'auto',
+          centeredSlides: false,
+          paginationClickable: true,
+          spaceBetween: 0,
+          mousewheelControl: true,
+          freeMode: true
+        });
 
-        $(".well").mCustomScrollbar({
-            axis:"y",
-            theme: "light",
-            scrollInertia: 300
+        var relatedSwiper = $('.related .swiper-related').swiper({
+          //Your options here:
+          mode: 'horizontal',
+          slidesPerView: 'auto',
+          centeredSlides: false,
+          paginationClickable: true,
+          spaceBetween: 0,
+          mousewheelControl: true,
+          freeMode: true
+        });
+
+        $(window).load(function() { 
+
+          $(".well").mCustomScrollbar({
+              axis:"y",
+              theme: "light",
+              scrollInertia: 300
+          });
+
+          $(".tiers-container").mCustomScrollbar({
+              axis:"y",
+              theme: "light",
+              scrollInertia: 300
+          });
+
+
+          if(document.referrer.indexOf(location.protocol + "//" + location.host) === 0)  {
+
+            if($('.inner').hasClass('normal-view')) {
+              showBackBar();
+            }
+            
+          }
+
+
         });
 
 
-        var regEx = /(\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)/;
-     
-        $(".address span").filter(function() {
-            return $(this).html().match(regEx);
-        }).each(function() {
-            $(this).html($(this).html().replace(regEx, "<a href=\"mailto:$1\">$1</a>"));
-        });
+        var regEx = /(\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)/g;
 
-
-        $('a').each(function() {
-           var a = new RegExp('/' + window.location.host + '/');
-           if(!a.test(this.href)) {
-               $(this).click(function(event) {
-                   event.preventDefault();
-                   event.stopPropagation();
-                   window.open(this.href, '_blank');
-               });
-           }
+        $('.address span, article.post .text, .sidebar-bottom a.newsletter').linkify({
+          target: "_blank"
         });
 
         if($('body').hasClass('error404')) {
