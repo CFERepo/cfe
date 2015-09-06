@@ -22,7 +22,6 @@
         var pagesTraversed = 0,
         filter_selected,
         x = document.cookie,
-        momentum = 0,
         containerStatic = $('.static'),
         innerContainerStatic = $('.static div.content'),
         targetContainer = false,
@@ -37,8 +36,24 @@
           paginationClickable: true,
           spaceBetween: 0,
           mousewheelControl: true,
-          freeMode: true
+          freeMode: true,
+          keyboardControl: true,
+          nextButton: 'a.content-forward',
+          prevButton: 'a.content-back'
         };
+
+        var s1 = {
+          nextButton: '.feed-ctl a.content-forward',
+          prevButton: '.feed-ctl a.content-back'
+        };
+
+        var s2 = {
+          nextButton: '.related-ctl a.content-forward',
+          prevButton: '.related-ctl a.content-back'
+        };
+
+        var featuredSwipeSettings = $.extend({}, swipeSettings, s1),
+        relatedSwipeSettings = $.extend({}, swipeSettings, s2);
 
         $grid = ['featured', 'related'];
 
@@ -76,11 +91,11 @@
 
           } else {
             if(!featuredSwiper) {
-              featuredSwiper = $('.featured .swiper-featured').swiper(swipeSettings);
+              featuredSwiper = $('.featured .swiper-featured').swiper(featuredSwipeSettings);
             }
 
              if(!relatedSwiper) {
-              relatedSwiper = $('.related .swiper-related').swiper(swipeSettings);
+              relatedSwiper = $('.related .swiper-related').swiper(relatedSwipeSettings);
             }           
           }
         }
@@ -110,14 +125,8 @@
         mobileCheck();
 
         $( window ).resize(function() {
-
-          // Set height of controls for feed container
-          var feedHeight = $('div.feed').innerHeight();
-          $('.feed-ctl a').css('height', feedHeight);
           
           mobileCheck();
-
-          resizeTasks();
 
           resetGrid();
 
@@ -139,35 +148,19 @@
 
         });
 
-        function resizeTasks() {
-
-          if($(window).width() > $('div.feed .content').innerWidth()) {
-            $('.feed-ctl').hide();
-          } else {
-            $('.feed-ctl').show();
-          }
-
-          //var relatedInner = $('div.related').innerWidth();
-          //var relatedOffset = Number(relatedInner);
-
-          console.log('window: ' + $(window).width());
-          //console.log('element: ' +  relatedOffset);
-
-          if(($(window).width() - 263) > $('div.related .content').innerWidth()) {
-            $('.related-ctl').hide();
-          } else {
-            $('.related-ctl').show();
-          }
-
-        }
-
         function showTooltips() {
 
           if(!$.cookie('visited')) {
             $.cookie('visited', 'true', { expires: 3600, path: '/' });
 
             $(".cover").css("opacity", 0.6).fadeIn(200, function () {     
-              $(".bubbles").fadeIn();
+
+              if($('html').hasClass('mobile')) {
+                $(".bubbles.mobile").fadeIn();
+              } else {
+                $(".bubbles.full").fadeIn();
+              }
+              
             });
           }
 
@@ -319,11 +312,6 @@
 
           if(articleArray) {
 
-            // Back/forward are never shown on single post page, so wipe them off before moving to content
-            if($( ".controls" ).hasClass('toggle-show')) {
-              toggleControls();
-            }
-
             updateContent(articleArray);
 
 
@@ -363,62 +351,6 @@
           });
 
         });
-
-        function toggleControlVisibility() {
-
-          $( ".controls" ).each(function( index, element ) {
-
-            if(!$('a.content-forward', this).is(':visible')) {
-              $('a.content-forward', this).fadeIn();
-            }
-
-          });
-        }
-
-        function toggleControls(reset) {
-
-          // Set height of controls for feed container
-          var feedHeight = $('div.feed').innerHeight();
-          $('.feed-ctl a').css('height', feedHeight);
-
-          // Apply values to individual control elements
-          $( ".controls" ).each(function( index, element ) {
-
-
-
-            var position = $( "a.content-back", this ).css( "left" );
-
-            if(position == '194px') {
-              $( this ).addClass( "toggle-show" );
-              $( "a.content-back", this ).animate({ "left": "263px" }, 50 );
-            } else {
-              $( this ).removeClass( "toggle-show" );
-              $( "a.content-back", this ).animate({ "left": "194px" }, 50 );
-              //$( "a.content-back", this ).fadeOut(100);
-            }
-
-            var position = $( "a.content-forward", element ).css( "right" );
-
-            if(position == '-50px') {
-              $( "a.content-forward", this ).animate({ "right": "0px" }, 50 );
-            } else {
-              $( "a.content-forward", this ).animate({ "right": "-50px" }, 50 );
-              //$( "a.content-forward", this ).fadeOut(100);
-            }       
-
-
-            if(!$('a.content-forward', this).is(':visible')) {
-              $('a.content-forward', this).fadeIn();
-            }
-
- 
-
-          });
-
-          // Hide sidebars if content does not overflow browser window
-          resizeTasks();
-
-        }
 
 
         function initIsotope() {
@@ -470,7 +402,7 @@
 
                     // ONLY re-init swiper if desktop
                     if(!$('html').hasClass('mobile')) {
-                      featuredSwiper = $('.featured .swiper-featured').swiper(swipeSettings);
+                      featuredSwiper = $('.featured .swiper-featured').swiper(featuredSwipeSettings);
                     }
 
                   }
@@ -483,12 +415,12 @@
                     // Initialize swiper if it previously was not due to display: none
                     if($('.related .content').height() == 0) {
                       $('.related .content').css('height', '150px');
-                      relatedSwiper = $('.related .swiper-related').swiper(swipeSettings);
+                      relatedSwiper = $('.related .swiper-related').swiper(relatedSwipeSettings);
                     }
 
                   } else {
                     if(!$('html').hasClass('mobile')) {
-                      relatedSwiper = $('.related .swiper-related').swiper(swipeSettings);
+                      relatedSwiper = $('.related .swiper-related').swiper(relatedSwipeSettings);
                     }
                   }
 
@@ -554,7 +486,9 @@
             $( '.feed article'  ).attr( "data-show-item", false );
             $( '.related article' ).attr( "data-show-item", false );
             $( '.feed article'  ).attr( "data-position", 0 );
-            $( '.related article' ).attr( "data-position", 0 );      
+            $( '.related article' ).attr( "data-position", 0 );     
+
+            window.scrollTo(0, 0); 
 
             if(!data.related && (data.type == 'search' || data.articles.length == 1)) {
               $('.inner').removeClass('grid-view').addClass('normal-view');
@@ -685,6 +619,17 @@
 
               if($('.inner').hasClass('grid-view')) {
 
+                if(featured_elements || related_elements) {
+                  // Update swiper positions, only if new content was inserted
+                  if(featuredSwiper) {
+                    featuredSwiper.slideTo(0, 300, true);
+                  }
+
+                  if(relatedSwiper) {
+                    relatedSwiper.slideTo(0, 300, true);
+                  }
+                }
+ 
                 if(featured_elements) {
                   $grid['featured'].isotope( 'insert', $(featured_elements) );
                 } else {
@@ -709,7 +654,7 @@
             } else {
 
               // No results page for Search
-              if(data.type == 'Search') {
+              if(data.type == 'search') {
                 showStaticPage();
               }
               
@@ -740,14 +685,6 @@
               }
 
           });
-        }
-
-        // Run after all animations complete
-        function postTasks() {
-          // Show social container after content rolls in on mobile
-          $('.social-container').css( 'display', 'block' );
-
-          $("body").css("cursor", "auto");
         }
 
         function getArticles() {
@@ -827,37 +764,6 @@
         });
 
 
-        // Content scrolling
-        $(".content-back").on( "click", function(e) {
-
-          e.preventDefault();
-
-          var element = $(this);
-
-          var target = $(this).parent().data('target');
-          var container = $('div.' + target);
-
-          moveBack(container, 300, 250);
-
-
-        });
-
-        $(".content-forward").on( "click", function(e) {
-
-          e.preventDefault();
-
-          var element = $(this);
-
-          var scroll;
-          var target = $(this).parent().data('target');
-
-          var container = $('div.' + target);
-
-          moveForward(container, 300, 250);
-
-
-        });
-
         function moveBack(container, push, speed) {
           var leftPos = $(container).scrollLeft();
 
@@ -868,11 +774,6 @@
 
                 if(!$(container).scrollLeft()) {
                   $('.' + controls + ' a.content-back').stop().fadeOut();
-
-                  toggleControlVisibility();
-                } else {
-                  //$(element).parent().find('.content-forward').fadeIn();
-                  toggleControlVisibility();
                 }
 
             });
@@ -882,11 +783,6 @@
 
             if(!$(container).scrollLeft()) {
               $('.' + controls + ' a.content-back').stop().fadeOut();
-
-              toggleControlVisibility();
-            } else {
-              //$(element).parent().find('.content-forward').fadeIn();
-              toggleControlVisibility();
             }
 
           }
@@ -1133,8 +1029,6 @@
 
           setTimeout(showTooltips, 1000);
 
-          $('.social-container').css( 'display', 'block' );
-
           var articles = $('.static div.content > article');
           var tags = [];
 
@@ -1171,11 +1065,6 @@
             showStaticPage();
           }
         }
-
-        var featuredSwiper = $('.featured .swiper-featured').swiper(swipeSettings);
-        var relatedSwiper = $('.related .swiper-related').swiper(swipeSettings);
-
-        resetSwiper();
 
         $(window).load(function() { 
 

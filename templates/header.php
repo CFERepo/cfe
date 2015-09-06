@@ -164,7 +164,7 @@ var queried_tags = false;
             </a>
             <ul class="height-transition height-transition-hidden">
               <?php foreach($categories as $item) { ?>
-              <li class="main-<?php echo $item->slug ?>" data-parent-slug="<?php echo $root_category->slug ?>" data-slug="<?php echo $item->slug ?>"><a href="#"><?php echo $item->name ?></a></li>
+              <li class="main-<?php echo $item->slug ?>" data-parent-slug="<?php echo $root_category->slug ?>" data-slug="<?php echo $item->slug ?>"><a href="/tags/<?php echo $item->slug ?>"><?php echo $item->name ?></a></li>
               <?php } ?>
             </ul>
           </li>
@@ -208,12 +208,16 @@ var queried_tags = false;
 
   <div class="container-fluid">
 
-    <div class="bubbles bubble-left">
+    <div class="bubbles mobile">
+      Welcome! Select the tags you wish to filter by from the 3 dropdowns. The content will filter accordingly at the right. Scroll up and down to see new content, or click the arrows to navigate horizontally.
+    </div>
+
+    <div class="bubbles full bubble-left">
       Welcome! Select the tags you wish to filter by from the 3 dropdowns. 
       The content will filter accordingly at the right.
     </div>
 
-    <div class="bubbles bubble-right">
+    <div class="bubbles full bubble-right">
       Scroll up and down to see new content, or click the arrows to navigate horizontally.
     </div>
 
@@ -304,16 +308,6 @@ var queried_tags = false;
         <p></p>
       </div>
 
-      <div data-target="feed" class="feed-ctl controls">
-        <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/09/arrow-content-navigation-right.png" /></a>
-        <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
-      </div>
-
-      <div data-target="related" class="related-ctl controls">
-        <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/09/arrow-content-navigation-right.png" /></a>
-        <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
-      </div>
-
       <div class="static">
 
         <div class="content">
@@ -339,6 +333,10 @@ var queried_tags = false;
       <div data-controls="feed-ctl" class="feed featured">
 
         <div class="swiper-featured">
+          <div class="feed-ctl controls">
+            <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/09/arrow-content-navigation-right.png" /></a>
+            <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
+          </div>
           <div class="content swiper-wrapper">
           </div>
         </div>
@@ -350,6 +348,10 @@ var queried_tags = false;
       <div class="related-wrapper">
         <div data-controls="related-ctl" class="related">
           <div class="swiper-related">
+            <div class="related-ctl controls">
+              <a href="#" class="content-forward"><img src="/wp-content/uploads/2015/09/arrow-content-navigation-right.png" /></a>
+              <a href="#" class="content-back"><img src="/wp-content/uploads/2015/07/arrow-content-navigation.png" /></a>
+            </div>
             <div class="content swiper-wrapper">
             </div>
           </div>
