@@ -631,9 +631,10 @@ header.main-content.content-expanded {
 
 div.top {
 	background-color: $alt1;
-	height: $top-nav-height;
+	min-height: $top-nav-height;
 	width: 100%;
     z-index: 11;
+    padding-top: 5px;
 }
 
 .social-container {
@@ -688,7 +689,7 @@ div.top {
 
 		input {
 		    width: 180px;
-		    padding-left: 20px;
+		    padding-left: 25px;
 		}
 	}
 
@@ -865,7 +866,7 @@ header.main-content.content-expanded .sidebar.open {
 	    margin-top: 0px;
 	    margin-bottom: 25px;
 
-	    padding: 10px;
+	    padding: 15px;
     }
 
     .call-out-blue {
@@ -1642,7 +1643,6 @@ div.landing {
 		    .image {
 
 		    	img {
-				    max-width: 900px;
 				    width: auto;
 				    height: auto;
 
@@ -1706,6 +1706,10 @@ div.landing {
 
 		div.sidebar {
 			overflow: hidden;
+		}
+
+		div.top {
+			padding-top: 0px;
 		}
 
 		.social-container {
