@@ -55,6 +55,26 @@
         var featuredSwipeSettings = $.extend({}, swipeSettings, s1),
         relatedSwipeSettings = $.extend({}, swipeSettings, s2);
 
+        var isotopeSettings = {
+          itemSelector: 'article',
+          layoutMode: 'horizontal',
+          getSortData: {
+            position: function( itemElem ) { // function
+              var position = $( itemElem ).attr('data-position');
+              return parseFloat( position );
+            }
+          },
+          sortBy: 'position',
+          sortAscending: true,
+          filter: function() {
+
+            var show = ($(this).attr( "data-show-item") === "true");
+
+            // If true, show
+            return show;
+          }
+        };
+
         $grid = ['featured', 'related'];
 
         function resetElements() {
@@ -105,14 +125,16 @@
 
             $.each( $grid, function( i, val ) {
 
-                $grid[val].isotope({layoutMode: 'vertical'});
+                $grid[val].isotope({layoutMode : 'vertical'});
            
             });
 
           } else {
             $.each( $grid, function( i, val ) {
 
-                $grid[val].isotope({layoutMode: 'horizontal'});
+                isotopeSettings.layoutMode = 'horizontal';
+
+                $grid[val].isotope({layoutMode : 'horizontal'});
            
             });
           }
@@ -357,30 +379,12 @@
             $.each( $grid, function( i, val ) {
 
               if($('html').hasClass('mobile')) {
-                var mode = 'vertical';
+                isotopeSettings.layoutMode = 'vertical';
               } else {
-                var mode = 'horizontal';
+                isotopeSettings.layoutMode = 'horizontal';
               }
 
-              $grid[val] = $('.' + val + ' .content').isotope({
-                itemSelector: 'article',
-                layoutMode: mode,
-                getSortData: {
-                  position: function( itemElem ) { // function
-                    var position = $( itemElem ).attr('data-position');
-                    return parseFloat( position );
-                  }
-                },
-                sortBy: 'position',
-                sortAscending: true,
-                filter: function() {
-
-                  var show = ($(this).attr( "data-show-item") === "true");
-
-                  // If true, show
-                  return show;
-                }
-              });
+              $grid[val] = $('.' + val + ' .content').isotope(isotopeSettings);
 
               $grid[val].on( 'arrangeComplete', function( event, filteredItems ) {
 
@@ -902,7 +906,7 @@
             if($(".sidebar").hasClass('open')) {
               return items;
             } else {
-              getFilteredArticleList(items);
+              getFilteredArticleList(items, false);
 
               return items;
             }
@@ -910,7 +914,7 @@
           }
         }
 
-        function getFilteredArticleList(items) {
+        function getFilteredArticleList(items, redirect) {
 
             $("body").css("cursor", "progress");
 
@@ -926,11 +930,22 @@
 
                     if(data.articles) {
 
-                      updateContent(data);
+                      if(!pagesTraversed) {
+                        history.replaceState(data, 'Center for Entrepreneurship', data.url);
+                      } else {
+                        history.pushState(data, 'Center for Entrepreneurship', data.url);
+                      }
 
                       pagesTraversed += 1;
 
-                      history.pushState(data, 'Center for Entrepreneurship', data.url);
+                      if(redirect) {
+                        // Refresh page on mobile only
+                        window.location.href = data.url;
+                        return false;
+                      } else {
+                        updateContent(data);
+                      }
+
 
                     } else {
 
@@ -960,7 +975,7 @@
        $(".tier-submit button").on( "click", function(e) {
 
           if(filter_selected) {
-            getFilteredArticleList(filter_selected);
+            getFilteredArticleList(filter_selected, true);
 
             $( ".sidebar a.back" ).click();
           }
@@ -1000,13 +1015,15 @@
 
                   if(data) {
 
-                    console.log(data);
-
-                    updateContent(data);
-
+                    if(!pagesTraversed) {
+                      history.replaceState(data, 'Center for Entrepreneurship', data.url);
+                    } 
 
                     pagesTraversed += 1;
+
                     history.pushState(data, 'Center for Entrepreneurship', data.url);
+
+                    updateContent(data);
 
                   }
 
