@@ -26,7 +26,19 @@
         containerStatic = $('.static'),
         innerContainerStatic = $('.static div.content'),
         targetContainer = false,
-        initialState = false;
+        initialState = false,
+        featuredSwiper = false,
+        relatedSwiper = false;
+
+        var swipeSettings = {
+          mode: 'horizontal',
+          slidesPerView: 'auto',
+          centeredSlides: false,
+          paginationClickable: true,
+          spaceBetween: 0,
+          mousewheelControl: true,
+          freeMode: true
+        };
 
         $grid = ['featured', 'related'];
 
@@ -38,15 +50,56 @@
           // Check if mobile...
           if (Modernizr.mq('(max-width: 768px)')) {
               $('html').addClass('mobile');
+
           } else {
 
               resetElements();
 
               $('html').removeClass('mobile');
+          }
+        }
 
+        function resetSwiper() {
+          if($('html').hasClass('mobile')) {
 
+            if(featuredSwiper) {
+              featuredSwiper.destroy();
 
+              featuredSwiper = false;
+            }
 
+            if(relatedSwiper) {
+              relatedSwiper.destroy();
+
+              relatedSwiper = false;
+            }
+
+          } else {
+            if(!featuredSwiper) {
+              featuredSwiper = $('.featured .swiper-featured').swiper(swipeSettings);
+            }
+
+             if(!relatedSwiper) {
+              relatedSwiper = $('.related .swiper-related').swiper(swipeSettings);
+            }           
+          }
+        }
+
+        function resetGrid() {
+          if($('html').hasClass('mobile')) {
+
+            $.each( $grid, function( i, val ) {
+
+                $grid[val].isotope({layoutMode: 'vertical'});
+           
+            });
+
+          } else {
+            $.each( $grid, function( i, val ) {
+
+                $grid[val].isotope({layoutMode: 'horizontal'});
+           
+            });
           }
         }
 
@@ -65,6 +118,10 @@
           mobileCheck();
 
           resizeTasks();
+
+          resetGrid();
+
+          resetSwiper();
 
 
         });
@@ -375,7 +432,7 @@
 
               $grid[val] = $('.' + val + ' .content').isotope({
                 itemSelector: 'article',
-                layoutMode: 'horizontal',
+                layoutMode: mode,
                 getSortData: {
                   position: function( itemElem ) { // function
                     var position = $( itemElem ).attr('data-position');
@@ -406,9 +463,35 @@
                 });
 
                 if(val == 'featured') {
-                  featuredSwiper.update(true);
+
+                  if(featuredSwiper) {
+                    featuredSwiper.update(true);
+                  } else {
+
+                    // ONLY re-init swiper if desktop
+                    if(!$('html').hasClass('mobile')) {
+                      featuredSwiper = $('.featured .swiper-featured').swiper(swipeSettings);
+                    }
+
+                  }
+                  
                 } else {
-                  relatedSwiper.update(true);
+
+                  if(relatedSwiper) {
+                    relatedSwiper.update(true);
+
+                    // Initialize swiper if it previously was not due to display: none
+                    if($('.related .content').height() == 0) {
+                      $('.related .content').css('height', '150px');
+                      relatedSwiper = $('.related .swiper-related').swiper(swipeSettings);
+                    }
+
+                  } else {
+                    if(!$('html').hasClass('mobile')) {
+                      relatedSwiper = $('.related .swiper-related').swiper(swipeSettings);
+                    }
+                  }
+
                 }
 
                 $("body").css("cursor", "auto");
@@ -467,17 +550,16 @@
             featured_elements = '',
             related_elements = '';
 
+            // Defaults
             $( '.feed article'  ).attr( "data-show-item", false );
             $( '.related article' ).attr( "data-show-item", false );
             $( '.feed article'  ).attr( "data-position", 0 );
             $( '.related article' ).attr( "data-position", 0 );      
 
-            //$( container ).stop().animate({ "opacity": 0}, 200, function() {
-            //$( container ).stop().fadeTo( 300 , 0, function() {
-
             if(!data.related && (data.type == 'search' || data.articles.length == 1)) {
               $('.inner').removeClass('grid-view').addClass('normal-view');
 
+                // Set up some data type specific classes/markup before content is placed
                 $(innerContainerStatic).removeClass('search');
 
                 $('.static div.content article').remove();
@@ -522,8 +604,6 @@
               }  
 
               $.each(data.articles.concat(data.related), function( i, val ) {
-
-                console.log(val);
 
               	if(val) {
 
@@ -590,16 +670,6 @@
                         }
                       }
 
-                      /*if(val.type == 'featured') {
-                        if(i % 2 == 0) {
-                          $( "." + val.type + " .article-" + val.uid ).addClass('t1').removeClass('t2');
-                        } else {
-                          $( "." + val.type + " .article-" + val.uid ).addClass('t2').removeClass('t1');
-                        }
-                      }*/
-
-
-
 	                } else {
                       var markup = Mustache.render(template, val);
 
@@ -638,6 +708,7 @@
 
             } else {
 
+              // No results page for Search
               if(data.type == 'Search') {
                 showStaticPage();
               }
@@ -1101,27 +1172,10 @@
           }
         }
 
-        var featuredSwiper = $('.featured .swiper-featured').swiper({
-          //Your options here:
-          mode: 'horizontal',
-          slidesPerView: 'auto',
-          centeredSlides: false,
-          paginationClickable: true,
-          spaceBetween: 0,
-          mousewheelControl: true,
-          freeMode: true
-        });
+        var featuredSwiper = $('.featured .swiper-featured').swiper(swipeSettings);
+        var relatedSwiper = $('.related .swiper-related').swiper(swipeSettings);
 
-        var relatedSwiper = $('.related .swiper-related').swiper({
-          //Your options here:
-          mode: 'horizontal',
-          slidesPerView: 'auto',
-          centeredSlides: false,
-          paginationClickable: true,
-          spaceBetween: 0,
-          mousewheelControl: true,
-          freeMode: true
-        });
+        resetSwiper();
 
         $(window).load(function() { 
 
