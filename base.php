@@ -43,8 +43,6 @@ use Roots\Sage\Wrapper;
 
     <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/isotope.pkgd.min.js'></script>
     <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/horizontal.js'></script>
-
-    <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/jquery.mousewheel.min.js'></script>
     <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/jquery.cookie.js'></script>
     
     <script type='text/javascript' src='/wp-content/themes/cfe/assets/scripts/linkify.min.js'></script>

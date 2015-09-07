@@ -494,6 +494,22 @@
 
             window.scrollTo(0, 0); 
 
+            // Loop through and ensure all selected tags marked as checked in case of user hitting back button
+            if(data.selected_terms) {
+              var reference = data.selected_terms.split(",");
+
+              // Reset to default state
+              $('.tiers-container input').prop('checked', false);
+
+              $( reference ).each(function( i, value ) {
+                $('.tiers-container input[data-term-id="' + value + '"]').prop('checked', true);
+              });
+
+              // Update selected
+              applyFilters();
+
+            }
+
             if(!data.related && (data.type == 'search' || data.articles.length == 1)) {
               $('.inner').removeClass('grid-view').addClass('normal-view');
 
@@ -900,23 +916,18 @@
 
             $('.filters-list').html('SELECTED: ' + term_list);
 
-            items = JSON.stringify(items);
+            return items;
 
-            // Don't fire ajax request on checkbox select if mobile view
-            if($(".sidebar").hasClass('open')) {
-              return items;
-            } else {
-              getFilteredArticleList(items, false);
-
-              return items;
-            }
-
+          } else {
+            return false;
           }
         }
 
         function getFilteredArticleList(items, redirect) {
 
             $("body").css("cursor", "progress");
+
+            items = JSON.stringify(items);
 
             $.ajax({
                 url: '/wp-admin/admin-ajax.php',
@@ -969,6 +980,11 @@
         $(".tiers-container input").change(function() {
 
           filter_selected = applyFilters();
+
+          // Fire ajax request immediately on mobile when input clicked
+          if(!$(".sidebar").hasClass('open')) {
+            getFilteredArticleList(filter_selected, false);
+          }
 
         });
 
@@ -1068,6 +1084,8 @@
               // Run filters
               filter_selected = applyFilters();
 
+              getFilteredArticleList(filter_selected, false);
+
               //getFilteredArticleList(tagsJSON);
             }
 
@@ -1075,7 +1093,12 @@
 
           } else if(!queried_tags && !articles) {
             $(".tiers-container div.collapse:first-of-type").collapse('toggle');
-            $('.checkbox-input.whats-cfe').prop('checked', true).trigger("change");
+            $('.checkbox-input.whats-cfe').prop('checked', true);
+
+            filter_selected = applyFilers();
+
+            getFilteredArticleList(filter_selected, false);
+
           } else {
             $(".tiers-container div.collapse:first-of-type").collapse('toggle');
 

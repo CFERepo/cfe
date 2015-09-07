@@ -187,25 +187,6 @@ var queried_tags = false;
 
 <header class="main-content <?php if(!is_home()) { echo 'content-expanded show-cfe'; } ?>">
 
-  <div class="social-container">
-
-    <a class="button call-out" href="/2015/08/27/get-involved-with-cfe/"><?php echo $button->name ?></a>
-
-    <div class="social">
-      <a target="_blank" href="https://www.facebook.com/cfe.UofM"><i class="fa fa-facebook"></i></a>
-      <a target="_blank" href="https://twitter.com/UMCFE"><i class="fa fa-twitter"></i></a>
-      <a target="_blank" href="https://www.youtube.com/user/UMCFE"><i class="fa fa-youtube"></i></a>
-      <a target="_blank" href="https://instagram.com/umcfe/"><i class="fa fa-instagram"></i></a>
-    </div>
-
-    <form class="search-form" method="get" action="<?php echo get_site_url(); ?>">
-      <div class="input-prepend search">
-        <span class="add-on"><i class="fa fa-search fa-rotate-90"></i></span>
-        <input id="s" name="s" placeholder="" value>
-      </div>
-    </form>
-  </div>
-
   <div class="container-fluid">
 
     <div class="bubbles mobile">
@@ -361,8 +342,25 @@ var queried_tags = false;
       <div style="clear:both"></div>
     </div>
 
+  </div>
 
+  <div class="social-container">
 
+      <a class="button call-out" href="/2015/08/27/get-involved-with-cfe/"><?php echo $button->name ?></a>
+
+      <div class="social">
+        <a target="_blank" href="https://www.facebook.com/cfe.UofM"><i class="fa fa-facebook"></i></a>
+        <a target="_blank" href="https://twitter.com/UMCFE"><i class="fa fa-twitter"></i></a>
+        <a target="_blank" href="https://www.youtube.com/user/UMCFE"><i class="fa fa-youtube"></i></a>
+        <a target="_blank" href="https://instagram.com/umcfe/"><i class="fa fa-instagram"></i></a>
+      </div>
+
+      <form class="search-form" method="get" action="<?php echo get_site_url(); ?>">
+        <div class="input-prepend search">
+          <span class="add-on"><i class="fa fa-search fa-rotate-90"></i></span>
+          <input id="s" name="s" placeholder="" value>
+        </div>
+      </form>
   </div>
 </header>
 

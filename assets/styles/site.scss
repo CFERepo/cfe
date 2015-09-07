@@ -31,6 +31,7 @@ html {
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
+	position: static;
 }
 
 html, body {
@@ -40,7 +41,7 @@ html, body {
 }
 
 body {
-	position: absolute;
+	position: static;
 }
 
 html.mobile {
@@ -640,19 +641,10 @@ div.top {
 .social-container {
 	margin-top: 38px;
 	color: #fff;
-	float: right;
-
-    position: absolute;
-    bottom: 0px;
-    background-color: #0095a5;
-    padding: 40px;
-    padding-top: 120px;
-    height: 400px;
-    margin-top: 100px;
-    width: 100%;
-    text-align: center;
-
-	margin-right: 29px;
+	background-color: #0095a5;
+	padding: 40px;
+	width: 100%;
+	text-align: center;
 
 	.social {
 		display: block;
@@ -690,6 +682,7 @@ div.top {
 		input {
 		    width: 180px;
 		    padding-left: 25px;
+		    height: 20px;
 		}
 	}
 
@@ -1457,6 +1450,10 @@ div.landing {
 }
 
 
+.inner {
+	min-height: 500px;
+}
+
 .inner.normal-view {
 
 	padding-top: 0px;
@@ -1560,6 +1557,10 @@ div.landing {
  
 /* Small Devices, Tablets */
 @media only screen and (min-width : 769px) {
+
+	body {
+		position: absolute;
+	}
 
 	.container-fluid {
 		height: 100%;
@@ -1718,7 +1719,7 @@ div.landing {
 
 			position: absolute;
 
-		    bottom: auto;
+			top: 0px;
 		    background-color: transparent;
 		    padding: 0px;
 		    height: auto;
@@ -1779,13 +1780,6 @@ div.landing {
 
 html.mobile {
 
-	position: static;
-
-	body {
-		position: static;
-
-	}
-
 	/* Disable content scrolling on mobile */
 	.swiper-wrapper {
 
@@ -1829,8 +1823,6 @@ html.mobile {
 
 		height: auto;
 
-		padding-bottom: 400px;
-
 		a.brand {
 			margin-top: 0px;
 		}
@@ -1857,10 +1849,6 @@ html.mobile {
 		right: auto !important;
 		bottom: auto !important;
 		top: auto !important;
-	}
-
-	div.feed, div.static {
-		min-height: 900px;
 	}
 
 	div.feed .content, div.static .content {
@@ -1901,6 +1889,13 @@ html.mobile {
 	    position: absolute;
 	}
 
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 480px) {
+	div.feed {
+		min-height: 800px;
+	}
 }
 
 
