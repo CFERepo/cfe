@@ -39,11 +39,6 @@ function setup() {
   // Tell the TinyMCE editor to use a custom stylesheet
   //add_editor_style(Assets\asset_path('styles/editor-style.css'));
 
-  add_image_size( 'main-header', 980, 462, array( 'center', 'top' )  );
-  add_image_size( 'article-images', 700, 700, false );
-  add_image_size( 'featured-item-header', 352, 166, true );
-  add_image_size( 'square-large', 600, 600, true );
-  add_image_size( 'square', 125, 125, true );
 }
 add_action('after_setup_theme', __NAMESPACE__ . '\\setup');
 
@@ -70,3 +65,9 @@ function widgets_init() {
   ]);
 }
 add_action('widgets_init', __NAMESPACE__ . '\\widgets_init');
+
+add_image_size( 'main-header', 980, 462, array( 'center', 'top' )  );
+add_image_size( 'article-images', 700, 700, false );
+add_image_size( 'featured-item-header', 352, 166, true );
+add_image_size( 'square-large', 600, 600, true );
+add_image_size( 'square', 125, 125, true );
