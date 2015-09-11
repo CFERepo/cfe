@@ -274,8 +274,11 @@ var queried_tags = false;
 
         <div class="address">
           <h6>
+            <a href="https://www.google.com/maps/place/2281+Bonisteel+Blvd,+Ann+Arbor,+MI+48109/@42.291072,-83.715734,14z/data=!4m2!3m1!1s0x883cae8619224d83:0x1e8e4c96a565c63e?hl=en">
+            <span>3350 Duderstadt Center, North Campus</span>
+            <span>2281 Bonisteel Boulevard, Ann Arbor, MI</span>
+            </a>
             <span><a href="tel:734-763-1021">734-763-1021</a></span>
-            <span>CENTERFORENTREPRENEURSHIP@UMICH.EDU</span>
           </h6>
         </div>
       </div>
@@ -349,6 +352,7 @@ var queried_tags = false;
       <a class="button call-out" href="/2015/08/27/get-involved-with-cfe/"><?php echo $button->name ?></a>
 
       <div class="social">
+        <a target="_blank" href="mailto:centerforentrepreneurship@umich.edu"><i class="fa fa-envelope"></i></a>
         <a target="_blank" href="https://www.facebook.com/cfe.UofM"><i class="fa fa-facebook"></i></a>
         <a target="_blank" href="https://twitter.com/UMCFE"><i class="fa fa-twitter"></i></a>
         <a target="_blank" href="https://www.youtube.com/user/UMCFE"><i class="fa fa-youtube"></i></a>
