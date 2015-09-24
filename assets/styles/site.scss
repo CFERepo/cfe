@@ -1265,12 +1265,18 @@ div.related {
 	    visibility: hidden;
 	}
 
-	.title {
+	.title, .caption {
 		z-index:4;
 		width:100%;
 		max-width:125px;
 		color: #fff;
 		font-family: $font-fjalla;
+		margin: 0px auto;
+	}
+
+	.caption {
+		font-size: 0.8em;
+		max-width: 100px;
 	}
 
 	.detail-block {
