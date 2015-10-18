@@ -42,8 +42,8 @@ function setup() {
   add_image_size( 'main-header', 980, 462, array( 'center', 'top' )  );
   add_image_size( 'article-images', 700, 700, false );
   add_image_size( 'featured-item-header', 352, 166, true );
-  add_image_size( 'square-large', 600, 600, true );
-  add_image_size( 'square', 125, 125, true );
+  add_image_size( 'square-large', 600, 600, array( 'center', 'top' ) );
+  add_image_size( 'square', 125, 125, array( 'center', 'top' ) );
 
 }
 add_action('after_setup_theme', __NAMESPACE__ . '\\setup');

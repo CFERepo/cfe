@@ -82,5 +82,3 @@ function cfe_redirection_rules() {
 
 add_action( 'init', 'cfe_rewrite_rules' );
 add_action( 'parse_request', 'cfe_redirection_rules', 0 );
-
-add_filter('show_admin_bar', '__return_false');

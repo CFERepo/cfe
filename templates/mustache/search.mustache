@@ -1,11 +1,13 @@
 <article class="search" data-json="{{ json }}" data-thumb="{{ thumb }}" data-permalink="{{ permalink }}" data-title="{{ title }}" data-content="{{ content }}">
-  <a class="clickable">
+  <a class="clickable" href="{{ permalink }}">
     <div class="image">
       <img src="{{ thumb_small }}" />
     </div>
   </a>
   <div class="search-content">
-  <h4>{{ title }}</h4>
+  <a class="clickable" href="{{ permalink }}">
+    <h4>{{ title }}</h4>
+  </a>
   <div class="text">
     {{{ excerpt }}}
   </div>

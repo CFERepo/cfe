@@ -227,6 +227,10 @@ var queried_tags = false;
       <a class="back" href="#"><img src="/wp-content/uploads/2015/07/arrow-blue.png" />Back</a>
       
       <div class="faux-tiers-container">
+
+        <a class="button call-out newsletter" target="_blank" href="http://eepurl.com/bpVmtH"><i class="fa fa-envelope-o"></i> Student Newsletter</a>
+        <a class="button call-out newsletter" target="_blank" href="http://eepurl.com/1Bwij"><i class="fa fa-envelope-o"></i> General Newsletter</a>
+        
         <button type="button">
           Filters
         </button>
@@ -235,6 +239,9 @@ var queried_tags = false;
       </div>
 
       <div id="tier-group" class="tiers-container">
+
+        <a class="deselect" href="#">Deselect All</a>
+
         <?php foreach($sorted as $item) { ?>
         <button type="button" data-toggle="collapse" data-parent="#tier-group" data-target="#<?php echo $item['group']->slug ?>" aria-expanded="false" aria-controls="<?php echo $item['group']->slug ?>">
           <?php echo $item['group']->name ?>

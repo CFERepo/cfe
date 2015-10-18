@@ -39,7 +39,8 @@
           freeMode: true,
           keyboardControl: true,
           nextButton: 'a.content-forward',
-          prevButton: 'a.content-back'
+          prevButton: 'a.content-back',
+          resistanceRatio: 0
         };
 
         var s1 = {
@@ -111,13 +112,46 @@
 
           } else {
             if(!featuredSwiper) {
-              featuredSwiper = $('.featured .swiper-featured').swiper(featuredSwipeSettings);
+              initFeaturedSwiper();
             }
 
              if(!relatedSwiper) {
-              relatedSwiper = $('.related .swiper-related').swiper(relatedSwipeSettings);
+              initRelatedSwiper();
             }           
           }
+        }
+
+        function initFeaturedSwiper() {
+          featuredSwiper = $('.featured .swiper-featured').swiper(featuredSwipeSettings);
+
+          featuredSwiper.on('onSetTranslate', function (swiper, translate) {
+
+            if(swiper.isBeginning) {
+              swiper.updateClasses();
+            }
+
+            if(swiper.isEnd) {
+              swiper.updateClasses();
+            }
+
+          });
+
+        }
+
+        function initRelatedSwiper() {
+          relatedSwiper = $('.related .swiper-related').swiper(relatedSwipeSettings);
+
+          relatedSwiper.on('onSetTranslate', function (swiper, translate) {
+
+            if(swiper.isBeginning) {
+              swiper.updateClasses();
+            }
+
+            if(swiper.isEnd) {
+              swiper.updateClasses();
+            }
+
+          });
         }
 
         function resetGrid() {
@@ -199,13 +233,13 @@
           var element = $(this).next();
 
           $(element).on('hide.bs.collapse', function () {
-            $('i', button).removeClass('fa-plus');
-            $('i', button).addClass('fa-minus');
+            $('i', button).removeClass('fa-minus');
+            $('i', button).addClass('fa-plus');
           });
 
           $(element).on('show.bs.collapse', function () {
-            $('i', button).removeClass('fa-minus');
-            $('i', button).addClass('fa-plus');
+            $('i', button).removeClass('fa-plus');
+            $('i', button).addClass('fa-minus');
           })
         });
 
@@ -325,7 +359,8 @@
           var data = $(this).closest('article').data();
 
           var articleArray = {
-              articles: new Array()
+              articles: new Array(),
+              type: 'post'
           };
 
           articleArray.articles.push(data);
@@ -345,6 +380,18 @@
 
 
 
+
+        });
+
+        // Handle deselect
+        $( "a.deselect" ).on( "click", function(e) {
+
+          e.preventDefault();
+
+          // Reset to default state
+          $('.tiers-container input').prop('checked', false);
+
+          applyFilters();
 
         });
 
@@ -406,7 +453,7 @@
 
                     // ONLY re-init swiper if desktop
                     if(!$('html').hasClass('mobile')) {
-                      featuredSwiper = $('.featured .swiper-featured').swiper(featuredSwipeSettings);
+                      initFeaturedSwiper();
                     }
 
                   }
@@ -419,12 +466,12 @@
                     // Initialize swiper if it previously was not due to display: none
                     if($('.related .content').height() == 0) {
                       $('.related .content').css('height', '150px');
-                      relatedSwiper = $('.related .swiper-related').swiper(relatedSwipeSettings);
+                      initRelatedSwiper();
                     }
 
                   } else {
                     if(!$('html').hasClass('mobile')) {
-                      relatedSwiper = $('.related .swiper-related').swiper(relatedSwipeSettings);
+                      initRelatedSwiper();
                     }
                   }
 
@@ -665,6 +712,9 @@
 
                   if(data.type == 'post') {
                     document.title = data.articles[0].title;
+
+                    // Update WP admin bar
+                    updateAdminBar(data.articles[0]);
                   }
 
                   showStaticPage();
@@ -687,6 +737,22 @@
             //postTasks();
           }
         };
+
+        // Update Admin Bar
+        function updateAdminBar(article) {
+
+          var link = '/wp-admin/post.php?post=' + article.uid + '&action=edit';
+
+          console.log(link);
+
+          if(!$('#wp-admin-bar-root-default #wp-admin-bar-edit').length) {
+            $('#wp-admin-bar-root-default').append('<li id="wp-admin-bar-edit"><a class="ab-item" href="' + link + '">Edit Post</a></li>');
+          } else {
+            $('#wp-admin-bar-root-default #wp-admin-bar-edit a').attr("href", link);
+            $('#wp-admin-bar-root-default #wp-admin-bar-edit a').html('Edit Post');
+          }
+
+        }
 
         // Show page with no dynamic elements
         function showStaticPage() {

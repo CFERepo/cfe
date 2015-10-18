@@ -240,11 +240,6 @@ a.brand {
 	display: none;
 }
 
-#wpadminbar {
-	background: transparent;
-	display: none;
-}
-
 .cover {
 	display: none;
 	position: absolute;
@@ -345,11 +340,25 @@ a.brand {
     font-size: .875em;
 }
 
+a.deselect {
+	color: #fff;
+	padding-left: 10px;
+	font-size: 12px;
+	text-transform: uppercase;
+}
+
 .faux-tiers-container {
 	.filters-list {
 	    color: #fff;
 	    text-align: center;
 	    padding-bottom: 20px;
+	}
+
+	a.button.call-out.newsletter, button.call-out.newsletter {
+		background-color: #009CAD;
+		color: #fff;
+		font-size: 13px;
+		width: 100%;
 	}
 
 	padding-top: 20px;
@@ -1555,6 +1564,51 @@ div.landing {
 		}
 
 	}
+}
+
+body.admin-bar {
+
+	.message {
+		margin-top: 32px;
+	}
+
+	#wp-admin-bar-customize {
+		display: none;
+	}
+
+	#wp-admin-bar-comments {
+		display: none;
+	}
+
+	#wp-admin-bar-search {
+		display: none;
+	}
+
+	.social-container {
+		margin-top: 42px !important;
+	}
+
+	a.brand {
+		margin-top: 42px;
+	}
+
+	div.top {
+		margin-top: 32px;
+
+		a.brand {
+			margin-top: 10px;
+		}
+	}
+
+	div.sidebar {
+	    padding-top: 82px;
+	}
+
+	a.back {
+		margin-top: 32px;
+	}
+
+
 }
 
 /* Scrollbar height */
