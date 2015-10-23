@@ -364,6 +364,12 @@ a.deselect {
 	padding-top: 20px;
 }
 
+.pagination {
+    text-align: center;
+    display: block;
+    font-size: 1.5em;
+}
+
 .tiers-container {
 
     position: relative;
@@ -371,6 +377,19 @@ a.deselect {
     display: none;
 
     padding-top: 5px;
+
+    -webkit-transition: opacity .15s ease-in-out;
+    -moz-transition: opacity .15s ease-in-out;
+    -ms-transition: opacity .15s ease-in-out;
+    -o-transition: opacity .15s ease-in-out;
+    transition: opacity .15s ease-in-out;
+
+    opacity: 1;
+
+    &.loading {
+		opacity: 0.5;
+		pointer-events: none;
+    }
 
 	button {
 		text-transform: uppercase;
@@ -1617,10 +1636,24 @@ body.admin-bar {
 
 }
 
+
+
+@media only screen and (max-height : 588px) {
+	.start-container ul li ul li a {
+		font-size: 1.05em;
+	}
+}
+
+@media only screen and (max-height : 550px) {
+	.start-container ul li ul li a {
+		font-size: 0.9em;
+	}
+}
+
 /* Scrollbar height */
 @media only screen and (max-height : 620px) {
 	.tiers-container {
-		max-height: 355px;
+		max-height: 320px;
 	}
 
 	.tiers-container > .mCustomScrollBox {
