@@ -433,6 +433,12 @@ a.deselect {
 		    font-family: $font-fjalla;
 		    font-weight: 400;
 		    font-size: 0.875em;
+
+		    span {
+				max-width: 142px;
+				display: inline-block;
+				vertical-align: middle;
+		    }
 		}
 
 		.checkbox-custom input + .checkbox-custom-label:before {
@@ -441,11 +447,9 @@ a.deselect {
 			border: 1px solid #017C8A;
 			display: inline-block;
 			vertical-align: middle;
-			width: 20px;
-			height: 20px;
-			padding: 2px;
-			margin-right: 10px;
-			text-align: center;
+			width: 18px;
+			height: 18px;
+			margin-right: 7px;
 		}
 
 		.checkbox-custom input:checked + .checkbox-custom-label:before {
