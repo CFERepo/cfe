@@ -49,6 +49,19 @@ function cfe_redirection_rules() {
         $requested_path = '/';
     }
 
+    if(preg_match("/^\/([0-9]{4})\//", $requested_path, $matches)) {
+
+      $post_name = substr($requested_path, strrpos($requested_path, '/') + 1);
+
+      if($post_name) {
+        wp_redirect( '/' . $post_name, 301 ); 
+
+        exit();
+      }
+
+    }
+
+
     switch ($requested_path) {
         case '/main':
             $destination = '/tags/whats-cfe';
