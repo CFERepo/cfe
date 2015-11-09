@@ -103,7 +103,7 @@ function modify_uploaded_file_title( $attachment_ID )
 
     $array = array();
     $array['ID'] = $attachment_ID;
-    $array['post_title'] = 'Attachment-' . $post->post_title;
+    $array['post_title'] = $post->post_title . '-attachment';
 
     wp_update_post( $array );
 }
