@@ -95,3 +95,17 @@ function cfe_redirection_rules() {
 
 add_action( 'init', 'cfe_rewrite_rules' );
 add_action( 'parse_request', 'cfe_redirection_rules', 0 );
+
+function modify_uploaded_file_title( $attachment_ID ) 
+{
+
+    $post = get_post($attachment_ID);
+
+    $array = array();
+    $array['ID'] = $attachment_ID;
+    $array['post_title'] = 'Attachment-' . $post->post_title;
+
+    wp_update_post( $array );
+}
+
+add_action( 'add_attachment', 'modify_uploaded_file_title' );
