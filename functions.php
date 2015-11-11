@@ -64,22 +64,22 @@ function cfe_redirection_rules() {
 
     switch ($requested_path) {
         case '/main':
-            $destination = '/tags/whats-cfe';
+            $destination = '/tags/whats-cfe/';
             break;
         case '/mtractrans':
-            $destination = '/tags/mtractrans';
+            $destination = '/tags/mtractrans/';
             break;
         case '/grad':
-            $destination = '/tags/graduate';
+            $destination = '/tags/graduate-education/';
             break;
         case '/elp':
-            $destination = '/tags/elp';
+            $destination = '/tags/elp/';
             break;
         case '/thestartup':
-            $destination = '/tags/the-startup';
+            $destination = '/tags/the-startup/';
             break;
         case '/jsg':
-            $destination = '/tags/jsg';
+            $destination = '/tags/jsg/';
             break;
         default:
             $destination = false;
