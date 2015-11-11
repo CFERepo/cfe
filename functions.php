@@ -70,7 +70,7 @@ function cfe_redirection_rules() {
             $destination = '/tags/mtractrans/';
             break;
         case '/grad':
-            $destination = '/tags/graduate-education/';
+            $destination = '/graduate-education/';
             break;
         case '/elp':
             $destination = '/tags/elp/';
