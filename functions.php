@@ -75,12 +75,6 @@ function cfe_redirection_rules() {
         case '/elp':
             $destination = '/tags/elp/';
             break;
-        case '/startup':
-            $destination = '/tags/startup/';
-            break;
-        case '/thestartup':
-            $destination = '/tags/startup/';
-            break;
         case '/jsg':
             $destination = '/tags/jsg/';
             break;
