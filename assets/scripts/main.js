@@ -1307,6 +1307,7 @@
         });
 
 
+        // Test
         var regEx = /(\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)/g;
 
         $('.address span, article.post .text, .sidebar-bottom a.newsletter').linkify({
