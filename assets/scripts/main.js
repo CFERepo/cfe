@@ -321,7 +321,7 @@
           // For collapsing tier 1 dropdown
           var tier = $('#' + selected_parent);
 
-          console.log(selected);
+          //console.log(selected);
 
           if(selected_tag == 'contribute') {
             window.location.href = "/2015/08/27/get-involved-with-cfe/";
@@ -362,6 +362,18 @@
               articles: new Array(),
               type: 'post'
           };
+
+          if(data && data.permalink) {
+
+            var parts = data.permalink.split("/"),
+            path = parts[parts.length - 2];
+
+            if(path == 'techlab') {
+              window.location.href = '/techlab/';
+              return;
+            }
+
+          }
 
           articleArray.articles.push(data);
 
@@ -439,7 +451,7 @@
 
               $grid[val].on( 'arrangeComplete', function( event, filteredItems ) {
 
-                console.log('arrangeComplete');
+                //console.log('arrangeComplete');
 
                 var articles = $('article:hidden');
 
@@ -494,7 +506,7 @@
 
             $.each( $grid, function( i, val ) {
 
-                console.log(val);
+                //console.log(val);
 
                 if($("." + val + " .content").data('isotope')) {
                   $grid[val].isotope( 'remove', $("." + val + " .content article") );
@@ -772,7 +784,7 @@
 
           var link = '/wp-admin/post.php?post=' + article.uid + '&action=edit';
 
-          console.log(link);
+          //console.log(link);
 
           if(!$('#wp-admin-bar-root-default #wp-admin-bar-edit').length) {
             $('#wp-admin-bar-root-default').append('<li id="wp-admin-bar-edit"><a class="ab-item" href="' + link + '">Edit Post</a></li>');
@@ -830,7 +842,7 @@
 
           var articles = getArticles();
 
-          console.log(articles);
+          //console.log(articles);
 
           if(base) {
             history.replaceState(articles, 'CFE', base);
@@ -913,7 +925,7 @@
 
             var controls = $(container).data('controls');
 
-            console.log(controls);
+            //console.log(controls);
 
             $('.' + controls + ' a.content-back').stop().fadeIn();
 
@@ -996,8 +1008,8 @@
               } else {
                 var term_list = tiers[key].join(", ");
 
-                console.log(key);
-                console.log(term_list);
+                //console.log(key);
+                //console.log(term_list);
 
                 $('.' + key + '-list').html('SELECTED: ' + term_list);
               }
@@ -1024,7 +1036,7 @@
 
             $("body").css("cursor", "progress");
 
-            console.log('testing');
+            //console.log('testing');
 
             items = JSON.stringify(items);
 
@@ -1071,7 +1083,7 @@
 
                 },
                 error: function(errorThrown){
-                    console.log(errorThrown);
+                    //console.log(errorThrown);
 
                     $("body").css("cursor", "auto");
 
@@ -1183,7 +1195,7 @@
 
               },
               error: function(errorThrown){
-                  console.log(errorThrown);
+                  //console.log(errorThrown);
 
                   $("body").css("cursor", "auto");
               }
@@ -1195,52 +1207,77 @@
         // Set initial history state on page load if this is not the home page
         if($( "header.main-content" ).hasClass( "content-expanded" )) {
 
-          setInitialState();
-
           setTimeout(showTooltips, 1000);
 
           var articles = $('.static div.content > article');
           var tags = [];
 
+          var field = 's',
+          url = window.location.href;
 
-          if(queried_tags) {
-            var tags = queried_tags.split(",").map(function(t){return parseInt(t)});
+          if(url.indexOf('?' + field + '=') != -1) {
 
-            if(tags) {
+            $(".tiers-container div.collapse:first-of-type").collapse('toggle');
 
-              //var tagsJSON = JSON.stringify(tags);
+            var s = getParameterByName('s');
 
-              $.each( tags, function( i, val ) {
+            if(s) {
+              articleSearch(s);
+            }
 
-                $('.tiers-container input.checkbox-input[data-term-id="' + val + '"]').prop('checked', true);
-               
-              });
+          } else {
 
+            setInitialState();
+
+            if(queried_tags) {
+              var tags = queried_tags.split(",").map(function(t){return parseInt(t)});
+
+              if(tags) {
+
+                //var tagsJSON = JSON.stringify(tags);
+
+                $.each( tags, function( i, val ) {
+
+                  $('.tiers-container input.checkbox-input[data-term-id="' + val + '"]').prop('checked', true);
+                 
+                });
+
+                $(".tiers-container div.collapse:first-of-type").collapse('toggle');
+                
+                // Run filters
+                filter_selected = applyFilters();
+
+                getFilteredArticleList(filter_selected, false);
+
+                //getFilteredArticleList(tagsJSON);
+              }
+
+
+
+            } else if(!queried_tags && !articles) {
               $(".tiers-container div.collapse:first-of-type").collapse('toggle');
-              
-              // Run filters
-              filter_selected = applyFilters();
+              $('.checkbox-input.whats-cfe').prop('checked', true);
+
+              filter_selected = applyFilers();
 
               getFilteredArticleList(filter_selected, false);
 
-              //getFilteredArticleList(tagsJSON);
+            } else {
+              $(".tiers-container div.collapse:first-of-type").collapse('toggle');
+
+              showStaticPage();
             }
 
-
-
-          } else if(!queried_tags && !articles) {
-            $(".tiers-container div.collapse:first-of-type").collapse('toggle');
-            $('.checkbox-input.whats-cfe').prop('checked', true);
-
-            filter_selected = applyFilers();
-
-            getFilteredArticleList(filter_selected, false);
-
-          } else {
-            $(".tiers-container div.collapse:first-of-type").collapse('toggle');
-
-            showStaticPage();
           }
+
+
+        }
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
         }
 
         $(window).load(function() { 
