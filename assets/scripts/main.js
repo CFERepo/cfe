@@ -365,6 +365,8 @@
 
           if(data && data.permalink) {
 
+            var test;
+
             var parts = data.permalink.split("/"),
             path = parts[parts.length - 2];
 
