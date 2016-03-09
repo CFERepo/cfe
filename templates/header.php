@@ -122,7 +122,7 @@ asort($sorted);
 $api = new X_API();
 
 if(is_single() && $post) {
-  $articles = $api->get_articles($post->ID);
+  $article = $api->process_meta($post);
 } else {
   $articles = $api->get_articles();
 }
@@ -309,15 +309,14 @@ var queried_tags = false;
             </span>
           </a>
 
-          <?php if(is_single() && isset($articles['articles'])) { ?>
-            <?php foreach($articles['articles'] as $article) {
+          <?php 
 
+            if(is_single() && isset($article) && $article) {
               $tpl = $mustache->loadTemplate('post');
-
               echo $tpl->render((array)$article);
             }
-            ?>
-          <?php } ?>
+
+          ?>
         </div>
       </div>
 
